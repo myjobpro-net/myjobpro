@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vérification | My Job Pro</title>
+    <style>
+        /* CHARTE GRAPHISME INTEGRÉE */
+        body { 
+            background: #121212; 
+            color: #e0e0e0; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            margin: 0; 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        *, *:before, *:after { box-sizing: inherit; }
+
+        header {
+            background: #0A1F13; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 15px 30px; 
+            position: fixed; 
+            width: 100%;
+            top: 0; 
+            left: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #1a2e22; 
+        }
+        .logo-site { color: #FF8C00; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; text-decoration: none; }
+
+        .box { 
+            width: 100%; 
+            max-width: 450px; 
+            background: #1e1e1e; 
+            padding: 40px; 
+            border-radius: 12px; 
+            border: 1px solid #333; 
+            border-top: 5px solid #FF8C00;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            margin-top: 60px;
+        }
+
+        h1 { color: #f0f0f0; font-size: 1.6rem; font-weight: 600; text-align: center; margin-bottom: 10px; margin-top: 0; }
+        p { color: #a0a0a0; font-size: 0.95rem; line-height: 1.6; text-align: center; margin-bottom: 30px; }
+
+        .code-inputs { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 25px; }
+        .code-inputs input { 
+            width: 45px; 
+            height: 50px; 
+            background: #2b2b2b; 
+            border: 1px solid #333; 
+            color: white; 
+            font-size: 1.5rem; 
+            font-weight: bold; 
+            text-align: center; 
+            border-radius: 5px; 
+            outline: none; 
+            transition: 0.3s; 
+        }
+        .code-inputs input:focus { border-color: #FF8C00; background: #333; }
+
+        .timer-text { font-size: 0.85rem; color: #888; margin-bottom: 30px; text-align: center; }
+        .timer-text span { color: #2ECC71; font-weight: bold; }
+        
+        .btn-resend { background: transparent; border: none; color: #2ECC71; cursor: pointer; font-weight: bold; display: none; margin: 0 auto 30px auto; font-size: 0.85rem; outline: none; text-transform: uppercase; }
+        .btn-resend:hover { text-decoration: underline; }
+
+        .btn-submit { 
+            background: #FF8C00; color: white; padding: 14px; border-radius: 5px; font-weight: bold; border: none; 
+            cursor: pointer; transition: 0.3s; width: 100%; text-transform: uppercase; font-size: 0.9rem;
+        }
+        .btn-submit:hover { background: #e67e00; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-site">My Job Pro</a>
+    </header>
+
+    <main class="main-container">
+        <div class="box">
+            <h1>Vérification du compte</h1>
+            <p>Un code de confirmation à 6 chiffres a été envoyé à votre adresse e-mail. Saisissez-le ci-dessous.</p>
+            
+            <form id="verifyForm">
+                <div class="code-inputs">
+                    <input type="text" maxlength="1" pattern="[0-9]" required aria-label="Digit 1">
+                    <input type="text" maxlength="1" pattern="[0-9]" required aria-label="Digit 2">
+                    <input type="text" maxlength="1" pattern="[0-9]" required aria-label="Digit 3">
+                    <input type="text" maxlength="1" pattern="[0-9]" required aria-label="Digit 4">
+                    <input type="text" maxlength="1" pattern="[0-9]" required aria-label="Digit 5">
+                    <input type="text" maxlength="1" pattern="[0-9]" required aria-label="Digit 6">
+                </div>
+
+                <div class="timer-text" id="timer-container">
+                    Le code expire dans : <span id="countdown">03:00</span>
+                </div>
+                <button type="button" class="btn-resend" id="resendBtn" onclick="resendCode()">Renvoyer le code</button>
+
+                <button type="submit" class="btn-submit">Valider le code</button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Gestion automatique du focus d'un champ à un autre
+        const inputs = document.querySelectorAll('.code-inputs input');
+        
+        inputs.forEach((input, index) => {
+            // Saisie d'un caractère
+            input.addEventListener('input', (e) => {
+                if (input.value.length === 1 && index < inputs.length - 1) { 
+                    inputs[index + 1].focus(); 
+                }
+            });
+
+            // Gestion de la touche retour arrière (Backspace)
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace') {
+                    if (input.value.length === 0 && index > 0) { 
+                        inputs[index - 1].focus(); 
+                    } else {
+                        input.value = '';
+                    }
+                }
+            });
+
+            // Prise en charge du copier-coller global du code à 6 chiffres
+            input.addEventListener('paste', (e) => {
+                e.preventDefault();
+                const pasteData = e.clipboardData.getData('text').trim();
+                if (pasteData.length === inputs.length && /^\d+$/.test(pasteData)) {
+                    inputs.forEach((inp, i) => {
+                        inp.value = pasteData[i];
+                    });
+                    inputs[inputs.length - 1].focus();
+                }
+            });
+        });
+
+        // Redirection dynamique selon le rôle enregistré au moment de l'inscription
+        document.getElementById('verifyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Récupère le code complet pour vérification optionnelle
+            let enteredCode = '';
+            inputs.forEach(inp => enteredCode += inp.value);
+
+            // Récupère le profil choisi dans le localStorage
+            const userRole = localStorage.getItem('user_role');
+            alert("Compte vérifié avec succès !");
+
+            // Redirige vers le bon fichier d'espace selon la valeur trouvée
+            if (userRole === 'independant') {
+                window.location.href = "espace-independant.html";
+            } else if (userRole === 'client') {
+                window.location.href = "espace-client.html";
+            } else if (userRole === 'recruteur') {
+                window.location.href = "espace-recruteur.html";
+            } else {
+                window.location.href = "espace-candidat.html";
+            }
+        });
+
+        // Minuteur de 3 minutes
+        let time = 179;
+        const countdownEl = document.getElementById('countdown');
+        const timerContainer = document.getElementById('timer-container');
+        const resendBtn = document.getElementById('resendBtn');
+
+        const timer = setInterval(() => {
+            let minutes = Math.floor(time / 60); 
+            let seconds = time % 60;
+            seconds = seconds < 10 ? '0' + seconds : seconds;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            
+            countdownEl.textContent = `${minutes}:${seconds}`;
+            
+            if (time <= 0) { 
+                clearInterval(timer); 
+                timerContainer.style.display = 'none'; 
+                resendBtn.style.display = 'block'; 
+            }
+            time--;
+        }, 1000);
+
+        function resendCode() { 
+            alert("Un nouveau code de sécurité vous a été envoyé par e-mail !"); 
+            location.reload(); 
+        }
+    </script>
+</body>
+</html>

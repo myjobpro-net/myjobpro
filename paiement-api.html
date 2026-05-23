@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passerelle de Paiement Internationale</title>
+    <style>
+        body { background: #0c0c0c; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .gateway-box { width: 100%; max-width: 430px; background: #161616; padding: 30px; border-radius: 16px; border: 1px solid #252525; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.8); }
+        .amount-display { background: #1a1a1a; padding: 15px; border-radius: 8px; border: 1px solid #2d2d2d; margin-bottom: 25px; }
+        .amount-display h3 { margin: 0; color: #888; font-size: 0.8rem; text-transform: uppercase; }
+        .amount-display h1 { margin: 5px 0 0 0; color: #2ECC71; font-size: 1.8rem; }
+        .method-select { background: #222; border: 1px solid #444; color: white; padding: 12px; width: 100%; border-radius: 6px; font-size: 0.95rem; margin-bottom: 20px; outline: none; }
+        input { width: 100%; padding: 14px; border-radius: 6px; border: 1px solid #333; background: #222; color: #fff; outline: none; text-align: center; font-size: 1.1rem; margin-bottom: 15px; box-sizing: border-box; }
+        input:focus { border-color: #2ECC71; }
+        .btn-pay { background: #2ECC71; color: black; border: none; padding: 14px; border-radius: 6px; font-weight: bold; width: 100%; cursor: pointer; text-transform: uppercase; font-size: 0.9rem; }
+        .btn-pay:hover { background: #27ae60; }
+        .secure-footer { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 20px; color: #666; font-size: 0.75rem; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+    <div class="gateway-box">
+        <div style="font-size: 0.8rem; color: #888; font-weight: bold; text-transform: uppercase;">Passerelle de Paiement Multi-Devises</div>
+        <h2 style="margin: 5px 0 25px 0; font-size: 1.4rem; color: #fff;">My Job Pro Gateway</h2>
+
+        <div class="amount-display">
+            <h3>Montant International à facturer</h3>
+            <h1 id="pay-total">0 --</h1>
+        </div>
+
+        <div style="text-align: left; font-size: 0.85rem; color: #b0b0b0; margin-bottom: 8px;">Sélectionnez votre mode de règlement :</div>
+        <select id="payment-method-selector" class="method-select" onchange="adaptFields()">
+            <option value="mobile_money">Mobile Money Africain (Orange, MTN, Moov, Wave)</option>
+            <option value="card">Carte Bancaire Internationale (Visa, MasterCard)</option>
+            <option value="paypal">Compte Électronique PayPal</option>
+        </select>
+
+        <div id="dynamic-inputs">
+            <input type="tel" id="user-phone-card" placeholder="Numéro de compte ou de carte">
+            <input type="password" id="user-auth-secure" placeholder="Code secret, CVV ou OTP">
+        </div>
+
+        <button class="btn-pay" onclick="processGlobalPayment()">Confirmer le règlement mondial</button>
+        <div class="secure-footer">Chiffrement SSL 256-bits conforme aux normes internationales bancaires.</div>
+    </div>
+
+    <script>
+        let pendingAmount = 0; let currency = 'FCFA';
+        window.onload = function() {
+            pendingAmount = parseInt(localStorage.getItem('api_pay_demand') || '15000', 10);
+            currency = localStorage.getItem('user_currency') || 'FCFA';
+            document.getElementById('pay-total').textContent = `\${pendingAmount.toLocaleString('fr-FR')} \${currency}`;
+        };
+
+        function adaptFields() {
+            const method = document.getElementById('payment-method-selector').value;
+            const input1 = document.getElementById('user-phone-card');
+            const input2 = document.getElementById('user-auth-secure');
+            if (method === 'card') { input1.placeholder = "Numéro de Carte (16 chiffres)"; input2.placeholder = "Date Exp / CVC (MM/AA/CCV)"; } 
+            else if (method === 'paypal') { input1.placeholder = "Identifiant E-mail PayPal"; input2.placeholder = "Mot de passe PayPal"; } 
+            else { input1.placeholder = "Numéro Mobile Money"; input2.placeholder = "Code secret ou OTP"; }
+        }
+
+        function processGlobalPayment() {
+            const inputVal1 = document.getElementById('user-phone-card').value.trim();
+            if(inputVal1.length < 4) { alert("Erreur : Coordonnées de transaction incomplètes."); return; }
+            alert(`✓ Transaction de \${pendingAmount.toLocaleString('fr-FR')} \${currency} validée à l'international !`);
+            window.location.href = "messagerie.html";
+        }
+    </script>
+</body>
+</html>

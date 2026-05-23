@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politique de Confidentialité | My Job Pro</title>
+    <style>
+        body { 
+            background: #121212; 
+            color: #e0e0e0; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            margin: 0; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            box-sizing: border-box;
+        }
+        *, *:before, *:after { box-sizing: inherit; }
+
+        header {
+            background: #0A1F13; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 15px 30px; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            border-bottom: 1px solid #1a2e22; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+        }
+        .logo-site { color: #FF8C00; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; text-decoration: none; }
+        .btn-back { color: #2ECC71; text-decoration: none; font-weight: bold; font-size: 0.9rem; }
+
+        .legal-container { max-width: 800px; width: 100%; margin: 40px auto; padding: 0 20px; flex: 1; }
+        .legal-box { background: #1e1e1e; padding: 40px; border-radius: 12px; border: 1px solid #333; border-top: 5px solid #2ECC71; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        
+        h1 { color: #ffffff; font-size: 1.8rem; font-weight: 700; margin-bottom: 5px; margin-top: 0; }
+        .date-update { color: #2ECC71; font-size: 0.85rem; font-weight: bold; text-transform: uppercase; margin-bottom: 30px; }
+        
+        h2 { color: #2ECC71; font-size: 1.2rem; font-weight: 600; margin-top: 30px; margin-bottom: 12px; border-bottom: 1px solid #252525; padding-bottom: 8px; }
+        p, li { color: #b0b0b0; font-size: 0.9rem; line-height: 1.6; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+
+        footer { background: #0A1F13; padding: 25px; text-align: center; color: #555; font-size: 0.85rem; border-top: 1px solid #1a2e22; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-site">My Job Pro</a>
+        <div class="nav-right"><a href="index.html" id="back-link" class="btn-back">← Retour Accueil</a></div>
+    </header>
+
+    <div class="legal-container">
+        <div class="legal-box">
+            <h1>Politique de Confidentialité des Données</h1>
+            <div class="date-update">Conforme Loi n°2013-450 Côte d'Ivoire</div>
+
+            <h2>1. Collecte des Données Personnelles</h2>
+            <p>Dans le cadre de l'exploitation de ses services, My Job Pro collecte de manière licite et transparente les informations suivantes :</p>
+            <ul>
+                <li>Nom, adresse électronique, numéro de téléphone formaté par l'indicateur d'opérateur international.</li>
+                <li>Pièces d’identité officielles (CNI, Passeport, ou attestation d’exercice) stockées de manière cryptée et non visible publiquement, uniquement utilisées pour attribuer le badge de conformité.</li>
+                <li>Coordonnées de positionnement GPS exactes capturées par le navigateur.</li>
+            </ul>
+
+            <h2>2. Finalité du Traitement des Données</h2>
+            <p>Les données récoltées ont pour buts exclusifs :</p>
+            <ul>
+                <li>La sécurisation des transactions physiques et la lutte contre la fraude ou les faux profils.</li>
+                <li>L’affichage de la carte interactive OpenStreetMap pour le guidage des artisans vers le lieu du chantier.</li>
+                <li>L’activation du relais omnicanal convertissant les messages applicatifs non lus en SMS ou notifications push sur le terminal de l'artisan hors-ligne.</li>
+            </ul>
+
+            <h2>3. Conservation et Durée</h2>
+            <p>Les documents d'identité sont conservés pendant toute la durée d'activation du compte membre. Les journaux de preuves de paiement QR et d’itinéraires GPS sont archivés de manière chiffrée pendant une période réglementaire de 12 mois après clôture de la mission à des fins d'expertise légale.</p>
+
+            <h2>4. Vos Droits Numériques</h2>
+            <p>Chaque utilisateur conserve un droit de regard, d'opposition, d'accès et de suppression définitive de l'ensemble de ses informations personnelles. Ces requêtes s'exécutent directement en cliquant sur le bouton de réinitialisation disponible dans l'onglet des paramètres du compte.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div>&copy; 2026 My Job Pro. Protection des données auditée par l'ARTCI.</div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userRole = localStorage.getItem('user_role');
+            const backLink = document.getElementById('back-link');
+            
+            if (userRole) {
+                backLink.textContent = "← Retour à mon Espace";
+                if (userRole === 'independant') {
+                    backLink.href = "espace-independant.html";
+                } else if (userRole === 'client') {
+                    backLink.href = "espace-client.html";
+                } else if (userRole === 'recruteur') {
+                    backLink.href = "espace-recruteur.html";
+                } else if (userRole === 'candidat') {
+                    backLink.href = "espace-candidat.html";
+                }
+            }
+        });
+    </script>
+</body>
+</html>

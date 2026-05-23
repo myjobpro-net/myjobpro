@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Entreprise | My Job Pro</title>
+    <style>
+        body { 
+            background: #121212; 
+            color: #e0e0e0; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            margin: 0; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            box-sizing: border-box;
+        }
+        *, *:before, *:after { box-sizing: inherit; }
+
+        header {
+            background: #0A1F13; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 15px 30px; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            border-bottom: 1px solid #1a2e22; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+        }
+        .logo-site { color: #FF8C00; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; text-decoration: none; }
+
+        .company-container { max-width: 1000px; width: 100%; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 320px 1fr; gap: 30px; flex: 1; }
+        .company-sidebar { background: #1e1e1e; padding: 30px 20px; border-radius: 12px; border: 1px solid #333; height: fit-content; text-align: center; border-bottom: 5px solid #FFFFFF; }
+        .company-main { display: flex; flex-direction: column; gap: 30px; }
+        
+        .section-card { background: #1e1e1e; border-radius: 12px; padding: 30px; border: 1px solid #333; }
+        .section-card h2 { margin-top: 0; font-size: 1.2rem; color: #FF8C00; border-bottom: 1px solid #333; padding-bottom: 12px; margin-bottom: 20px; }
+        
+        /* Liste des infos entreprise avec icônes SVG intégrées */
+        .info-list { text-align: left; margin-top: 25px; padding: 0; list-style: none; }
+        .info-list li { margin-bottom: 15px; font-size: 0.9rem; color: #bbb; display: flex; align-items: center; gap: 12px; }
+        .info-list li svg { width: 16px; height: 16px; fill: #a0a0a0; flex-shrink: 0; }
+        .info-list strong { color: white; width: 75px; display: inline-block; }
+        
+        .job-item { background: #2b2b2b; padding: 20px; border-radius: 8px; border-left: 4px solid #FF8C00; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; gap: 15px; }
+        .job-details h4 { margin: 0 0 5px 0; font-size: 1.1rem; color: white; font-weight: 600; }
+        .job-details p { margin: 0; font-size: 0.85rem; color: #888; }
+        
+        .job-tags { display: flex; gap: 8px; margin-top: 8px; }
+        .job-tag { background: #0A1F13; color: #2ECC71; padding: 3px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; }
+        
+        .btn-apply { background: transparent; border: 1px solid #2ECC71; color: #2ECC71; padding: 8px 16px; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; text-decoration: none; font-size: 0.85rem; width: auto; flex-shrink: 0; }
+        .btn-apply:hover { background: #2ECC71; color: black; }
+        
+        footer { background: #0A1F13; padding: 25px; text-align: center; color: #555; font-size: 0.85rem; border-top: 1px solid #1a2e22; margin-top: auto; }
+
+        @media (max-width: 768px) {
+            .company-container { grid-template-columns: 1fr; gap: 20px; }
+            .job-item { flex-direction: column; align-items: flex-start; }
+            .btn-apply { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-site">My Job Pro</a>
+        <div class="nav-right">
+            <a href="index.html" id="back-dashboard-btn" style="color: #FF8C00; font-weight: bold; text-decoration: none; font-size: 0.9rem;">← Accueil</a>
+        </div>
+    </header>
+
+    <div class="company-container">
+        <aside class="company-sidebar">
+            <div style="width: 110px; height: 110px; background: #2b2b2b; border-radius: 12px; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; font-size: 3rem; border: 1px solid #333; color: #FF8C00;">🏢</div>
+            <h3 style="margin: 0; font-size: 1.3rem;" id="comp-sidebar-name">Tech Innov Africa</h3>
+            <p style="margin: 5px 0 20px 0; color: #FF8C00; font-size: 0.85rem; font-weight: bold;">Recruteur Vérifié</p>
+            
+            <ul class="info-list">
+                <li>
+                    <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                    <strong>Siège :</strong> <span id="comp-residence">Abidjan, Côte d'Ivoire</span>
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24"><path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z"/></svg>
+                    <strong>Secteur :</strong> <span>Technologies / Numérique</span>
+                </li>
+                <li>
+                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.83 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    <strong>Taille :</strong> <span>11 - 50 employés</span>
+                </li>
+            </ul>
+        </aside>
+
+        <main class="company-main">
+            <div class="section-card">
+                <h2>À propos de l'entreprise</h2>
+                <p style="margin: 0; line-height: 1.7; color: #bbb;" id="comp-about-desc">
+                    Tech Innov Africa est une agence digitale panafricaine spécialisée dans la transformation numérique des entreprises et le recrutement de profils techniques.
+                </p>
+            </div>
+
+            <div class="section-card">
+                <h2>Nos offres d'emploi actives</h2>
+                
+                <div class="job-item">
+                    <div class="job-details">
+                        <h4>Développeur Front-End React</h4>
+                        <p>Contrat : <strong>CDI</strong> | Salaire : <strong>600.000 FCFA</strong></p>
+                        <div class="job-tags"><span class="job-tag">React</span><span class="job-tag">Abidjan</span></div>
+                    </div>
+                    <button class="btn-apply" onclick="checkAuthToApply()">Postuler</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <div>&copy; 2026 My Job Pro. Tous droits réservés.</div>
+    </footer>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const role = localStorage.getItem('user_role');
+            const customCompany = localStorage.getItem('company_name');
+            const customLocation = localStorage.getItem('user_residence');
+
+            if (role === 'recruteur' && customCompany) {
+                document.getElementById('comp-sidebar-name').textContent = customCompany;
+                document.getElementById('comp-about-desc').innerHTML = `Bienvenue sur l'espace officiel de <strong>${customCompany}</strong>. Notre structure recrute activement de nouveaux talents et compétences sur My Job Pro.`;
+                
+                if (customLocation) {
+                    document.getElementById('comp-residence').textContent = customLocation;
+                }
+
+                const backBtn = document.getElementById('back-dashboard-btn');
+                backBtn.textContent = "← Mon Dashboard";
+                backBtn.href = "espace-recruteur.html";
+            }
+        });
+
+        function checkAuthToApply() {
+            const userConnected = localStorage.getItem('user_fullname');
+            if (userConnected) {
+                alert(`Félicitations ${userConnected}, votre candidature a été transmise avec succès ! ✓`);
+            } else {
+                alert("Accès refusé : Vous devez posséder un compte My Job Pro vérifié pour postuler.");
+                window.location.href = "inscription.html";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connexion Cloud | My Job Pro</title>
+    <style>
+        body { background: #121212; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        *, *:before, *:after { box-sizing: inherit; }
+        
+        header { background: #0A1F13; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; position: fixed; width: 100%; top: 0; left: 0; z-index: 1000; border-bottom: 1px solid #1a2e22; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .logo-site { color: #FF8C00; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; text-decoration: none; }
+        
+        .right-header { display: flex; align-items: center; gap: 20px; }
+        .nav-right a { color: #FF8C00; text-decoration: none; font-weight: bold; font-size: 0.9rem; }
+        
+        /* BADGE DE LOCALISATION AUTOMATIQUE SUR LE HEADER */
+        .geo-badge-header { background: #1e1e1e; border: 1px solid #333; padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; color: #2ECC71; }
+
+        .login-box { width: 100%; max-width: 450px; background: #1e1e1e; padding: 40px; border-radius: 12px; border: 1px solid #333; border-top: 5px solid #FF8C00; box-shadow: 0 15px 35px rgba(0,0,0,0.5); margin-top: 60px; }
+        h1 { color: #f0f0f0; font-size: 1.6rem; font-weight: 600; text-align: center; margin-bottom: 25px; margin-top: 0; }
+        label { display: block; margin-top: 15px; margin-bottom: 8px; font-size: 0.85rem; color: #b0b0b0; }
+        input { width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #333; background: #2b2b2b; color: #f0f0f0; outline: none; font-size: 0.9rem; box-sizing: border-box; }
+        input:focus { border-color: #FF8C00; }
+        
+        .password-container { position: relative; width: 100%; }
+        .toggle-text { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #2ECC71; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; user-select: none; }
+        
+        .btn-submit { background: #FF8C00; color: white; padding: 14px; border-radius: 5px; font-weight: bold; border: none; cursor: pointer; width: 100%; text-transform: uppercase; font-size: 0.9rem; margin-top: 25px; transition: 0.3s; }
+        .btn-submit:hover { background: #e67e00; }
+        .btn-submit:disabled { background: #444; color: #888; cursor: not-allowed; }
+        
+        .error-banner { display: none; background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; color: #e74c3c; padding: 12px; border-radius: 6px; font-size: 0.85rem; text-align: center; margin-bottom: 15px; }
+        .db-status-badge { text-align: center; font-size: 0.85rem; margin-top: 15px; font-weight: bold; color: #2ECC71; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-site">My Job Pro</a>
+        <div class="right-header">
+            <div class="geo-badge-header" id="geo-detect-badge">🌍 Cloud Network...</div>
+            <div class="nav-right"><a href="inscription.html" id="txt-nav-register">Créer un compte</a></div>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="login-box">
+            <h1 id="txt-login-title">Connexion Cloud</h1>
+            <div id="error-msg-box" class="error-banner"></div>
+            
+            <form id="monFormulaireConnexion">
+                <label id="txt-label-email">Adresse e-mail internationale</label>
+                <input type="email" id="emailSaisi" placeholder="nom@exemple.com" required>
+                
+                <label id="txt-label-pass">Mot de passe</label>
+                <div class="password-container">
+                    <input type="password" id="motDePasseSaisi" placeholder="••••••••" required>
+                    <span class="toggle-text" id="t-login" onclick="togglePassVisibility()">Voir</span>
+                </div>
+                
+                <button type="button" class="btn-submit" id="submit-btn" onclick="lancerAuthentificationDirecte()">S'authentifier sur le réseau</button>
+            </form>
+            
+            <div class="db-status-badge" id="db-status">🛡️ Tunnel Cloud direct : Prêt</div>
+        </div>
+    </main>
+
+    <script>
+        // 🚨 CONFIGURATION APIS SUPABASE CLOUD (MÊMES CLÉS QUE POUR VOTRE INSCRIPTION)
+        const CONFIG_SUPABASE_URL = "https://hqnhkzhckgytgxafflcx.supabase.co"; 
+        const CONFIG_SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbmhremhja2d5dGd4YWZmbGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5NTIsImV4cCI6MjA5NDk2Nzk1Mn0.lbvq-Xwo3fQP5UGBMROA4PafWWmF_B5PUiYx7NN3FxQ";              
+
+        let tentativesEchouees = 0;
+        let langueAutomatique = "en"; // Par défaut Anglais international
+
+        // DICTIONNAIRE MULTILINGUE POUR LA SÉCURITÉ DE CONNEXION (FR, EN, ES, DE)
+        const dictionnaireConnexion = {
+            fr: {
+                flag: "🇫🇷", registerNav: "Créer un compte", loginTitle: "Connexion Cloud",
+                labelEmail: "Adresse e-mail internationale", labelPass: "Mot de passe",
+                toggleShow: "Voir", toggleHide: "Masquer", btnSubmit: "S'authentifier sur le réseau",
+                statusTxt: "🛡️ Tunnel Cloud direct : Prêt", errFields: "⚠️ Veuillez remplir tous les champs.",
+                errServer: "❌ Le serveur Supabase rejette la connexion. Vérifiez l'adresse URL du projet.",
+                errNotFound: "❌ Aucun compte trouvé avec cette adresse e-mail.",
+                errBrute: "🛑 Sécurité : Compte gelé après 3 erreurs.",
+                errGlobal: "⚠️ Erreur réseau : Impossible de joindre l'infrastructure Cloud.",
+                successTxt: "✓ Connexion réussie !"
+            },
+            en: {
+                flag: "🇺🇸", registerNav: "Create Account", loginTitle: "Cloud Login",
+                labelEmail: "International Email Address", labelPass: "Password",
+                toggleShow: "Show", toggleHide: "Hide", btnSubmit: "Authenticate on Network",
+                statusTxt: "🛡️ Direct Cloud Tunnel: Ready", errFields: "⚠️ Please fill in all fields.",
+                errServer: "❌ The Supabase server rejects connection. Check project URL.",
+                errNotFound: "❌ No account found with this email address.",
+                errBrute: "🛑 Security: Account frozen after 3 failed attempts.",
+                errGlobal: "⚠️ Network Error: Unable to reach Cloud. Check connection.",
+                successTxt: "✓ Connection successful!"
+            },
+            es: {
+                flag: "🇪🇸", registerNav: "Crear Cuenta", loginTitle: "Iniciar Sesión",
+                labelEmail: "Dirección de Correo Internacional", labelPass: "Contraseña",
+                toggleShow: "Ver", toggleHide: "Ocultar", btnSubmit: "Autenticarse en la Red",
+                statusTxt: "🛡️ Túnel Cloud Directo: Listo", errFields: "⚠️ Por favor, complete todos los campos.",
+                errServer: "❌ El servidor Supabase rechaza la conexión. Verifique URL.",
+                errNotFound: "❌ No se encontró ninguna cuenta con este correo.",
+                errBrute: "🛑 Seguridad: Cuenta congelada tras 3 intentos fallidos.",
+                errGlobal: "⚠️ Error de Red: Imposible conectar con Cloud. Verifique internet.",
+                successTxt: "✓ ¡Conexión exitosa!"
+            },
+            de: {
+                flag: "🇩🇪", registerNav: "Konto erstellen", loginTitle: "Cloud-Anmeldung",
+                labelEmail: "Internationale E-Mail-Adresse", labelPass: "Passwort",
+                toggleShow: "Anzeigen", toggleHide: "Ausblenden", btnSubmit: "Im Netzwerk authentifizieren",
+                statusTxt: "🛡️ Direkter Cloud-Tunnel: Bereit", errFields: "⚠️ Bitte füllen Sie alle Felder aus.",
+                errServer: "❌ Der Supabase-Server lehnt die Verbindung ab. Projekt-URL prüfen.",
+                errNotFound: "❌ Kein Konto mit dieser E-Mail-Adresse gefunden.",
+                errBrute: "🛑 Sicherheit: Konto nach 3 Fehlversuchen gesperrt.",
+                errGlobal: "⚠️ Netzwerkfehler: Cloud-Infrastruktur kann nicht erreicht werden.",
+                successTxt: "✓ Anmeldung erfolgreich!"
+            }
+        };
+
+        // EXÉCUTION DE LA DÉTECTION INVISIBLE AUTOMATIQUE
+        async function initialiserPageConnexionAutomatique() {
+            const structureNavigateur = navigator.language || navigator.userLanguage;
+            const prefixeSys = structureNavigateur.substring(0, 2).toLowerCase();
+            
+            if (["fr", "en", "es", "de"].includes(prefixeSys)) { langueAutomatique = prefixeSys; }
+
+            try {
+                const fluxGeo = await fetch("https://ipapi.co");
+                const zone = await fluxGeo.json();
+                
+                if(["DE", "AT", "CH"].includes(zone.country_code)) langueAutomatique = "de";
+                else if(["ES", "MX", "AR", "CO", "CL"].includes(zone.country_code)) langueAutomatique = "es";
+                else if(["FR", "CI", "SN", "BF", "CM", "BE"].includes(zone.country_code)) langueAutomatique = "fr";
+
+                document.getElementById('geo-detect-badge').textContent = `\${dictionnaireConnexion[langueAutomatique].flag} \${zone.city}`;
+            } catch (err) {
+                document.getElementById('geo-detect-badge').textContent = `\${dictionnaireConnexion[langueAutomatique].flag} Online`;
+            }
+
+            appliquerTraductionConnexion(langueAutomatique);
+        }
+
+        function appliquerTraductionConnexion(langue) {
+            const txt = dictionnaireConnexion[langue];
+            if (!txt) return;
+
+            document.getElementById('txt-nav-register').textContent = txt.registerNav;
+            document.getElementById('txt-login-title').textContent = txt.loginTitle;

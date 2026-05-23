@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conditions Générales d'Utilisation | My Job Pro</title>
+    <style>
+        body { 
+            background: #121212; 
+            color: #e0e0e0; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            margin: 0; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            box-sizing: border-box;
+        }
+        *, *:before, *:after { box-sizing: inherit; }
+
+        header {
+            background: #0A1F13; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 15px 30px; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            border-bottom: 1px solid #1a2e22; 
+        }
+        .logo-site { color: #FF8C00; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; text-decoration: none; }
+        .btn-back { color: #2ECC71; text-decoration: none; font-weight: bold; font-size: 0.9rem; }
+
+        .legal-container { max-width: 800px; width: 100%; margin: 40px auto; padding: 0 20px; flex: 1; }
+        .legal-box { background: #1e1e1e; padding: 40px; border-radius: 12px; border: 1px solid #333; border-top: 5px solid #FF8C00; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        
+        h1 { color: #ffffff; font-size: 1.8rem; font-weight: 700; margin-bottom: 5px; margin-top: 0; }
+        .date-update { color: #2ECC71; font-size: 0.85rem; font-weight: bold; text-transform: uppercase; margin-bottom: 30px; }
+        
+        h2 { color: #FF8C00; font-size: 1.2rem; font-weight: 600; margin-top: 30px; margin-bottom: 12px; border-bottom: 1px solid #252525; padding-bottom: 8px; }
+        p, li { color: #b0b0b0; font-size: 0.9rem; line-height: 1.6; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+
+        .accept-section {
+            margin-top: 35px;
+            padding-top: 25px;
+            border-top: 1px solid #333;
+            text-align: center;
+        }
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: #ffffff;
+            user-select: none;
+        }
+        .checkbox-container input {
+            width: 18px;
+            height: 18px;
+            accent-color: #FF8C00;
+            cursor: pointer;
+        }
+        .btn-submit-cgu { 
+            background: #FF8C00; color: white; padding: 14px 30px; border-radius: 5px; font-weight: bold; border: none; 
+            cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.9rem; width: 100%; max-width: 300px;
+        }
+        .btn-submit-cgu:disabled { background: #444; color: #888; cursor: not-allowed; }
+        .btn-submit-cgu:not(:disabled):hover { background: #e67e00; }
+
+        footer { background: #0A1F13; padding: 25px; text-align: center; color: #555; font-size: 0.85rem; border-top: 1px solid #1a2e22; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-site">My Job Pro</a>
+        <div class="nav-right"><a href="index.html" class="btn-back">← Retour Accueil</a></div>
+    </header>
+
+    <div class="legal-container">
+        <div class="legal-box">
+            <h1>Conditions Générales d'Utilisation (CGU)</h1>
+            <div class="date-update">En vigueur en 2026</div>
+
+            <h2>1. Objet du Service</h2>
+            <p>La plateforme My Job Pro met en relation des employeurs, des candidats juniors et des travailleurs indépendants (artisans, chauffeurs de taxi, plombiers) en République de Côte d'Ivoire. L'accès à la plateforme requiert la création d'un compte vérifié.</p>
+
+            <h2>2. Engagements de l'Utilisateur</h2>
+            <ul>
+                <li><strong>Exactitude des informations :</strong> L'utilisateur s'engage à fournir son identité réelle, son secteur d'activité exact, son diplôme ou attestation de qualification et un lieu de résidence véridique.</li>
+                <li><strong>Obligation de la photo :</strong> Pour des raisons de sûreté et de transparence, le chargement d'une photo de profil nette et identifiable est strictement requis lors de l'inscription.</li>
+            </ul>
+
+            <h2>3. Mécanisme de Paiement et Séquestre Sécurisé</h2>
+            <p>Toutes les transactions négociées sur la messagerie transitent via un compte de séquestre sécurisé. L'employeur accepte que les fonds soient gelés et suspendus temporairement par My Job Pro. La libération de l'argent vers le portefeuille du travailleur s'effectue après validation du travail fini ou par numérisation du code QR de terrain.</p>
+
+            <h2>4. Système de Commissions Marketplace</h2>
+            <p>Une commission unique et automatique de <strong>10 %</strong> est appliquée sur la valeur des prestations validées par le système de dépôt de garantie. Ce montant sert exclusivement à financer la protection des transactions, la maintenance des infrastructures de traçabilité et l'authentification des profils.</p>
+
+            <h2>5. Résolution des Litiges et Preuves GPS</h2>
+            <p>En cochant la case de validation lors d'un contrat QR ou séquestre, l'employeur et l'artisan acceptent que le journal d'empreintes techniques (coordonnées GPS de l'accord, horodatage, logs d'activation) fasse foi juridiquement devant l'ARTCI et les tribunaux ivoiriens en cas de contestation ou de malfaçon.</p>
+
+            <div class="accept-section">
+                <label class="checkbox-container">
+                    <input type="checkbox" id="agreeCheckbox" onchange="toggleButton()">
+                    J'accepte sans réserve les présentes CGU de My Job Pro
+                </label>
+                <button type="button" id="submitCguBtn" class="btn-submit-cgu" disabled onclick="saveAgreement()">Accepter et Continuer</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div>&copy; 2026 My Job Pro. Conditions d'utilisation régies par le droit ivoirien.</div>
+    </footer>
+
+    <script>
+        // Vérification au chargement si les CGU ont déjà été acceptées
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('cgu_accepted') === 'true') {
+                const checkbox = document.getElementById('agreeCheckbox');
+                const button = document.getElementById('submitCguBtn');
+                checkbox.checked = true;
+                button.disabled = false;
+                button.textContent = "Déjà accepté";
+            }
+        });
+
+        function toggleButton() {
+            const checkbox = document.getElementById('agreeCheckbox');
+            const button = document.getElementById('submitCguBtn');
+            button.disabled = !checkbox.checked;
+            if (checkbox.checked && localStorage.getItem('cgu_accepted') === 'true') {
+                button.textContent = "Déjà accepté";
+            } else {
+                button.textContent = "Accepter et Continuer";
+            }
+        }
+
+        function saveAgreement() {
+            localStorage.setItem('cgu_accepted', 'true');
+            alert("Merci ! Vous avez accepté les conditions d'utilisation.");
+            window.location.href = "inscription.html"; 
+        }
+    </script>
+</body>
+</html>

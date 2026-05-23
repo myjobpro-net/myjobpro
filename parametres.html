@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paramètres | My Job Pro</title>
+    <style>
+        body { 
+            background: #121212; 
+            color: #e0e0e0; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            margin: 0; 
+            min-height: 100vh; 
+            display: flex; 
+            box-sizing: border-box;
+        }
+        *, *:before, *:after { box-sizing: inherit; }
+
+        .sidebar { 
+            width: 260px; 
+            background: #0A1F13; 
+            border-right: 1px solid #1a2e22; 
+            display: flex; 
+            flex-direction: column; 
+            padding: 20px; 
+            position: fixed; 
+            height: 100vh; 
+            box-sizing: border-box; 
+        }
+        .logo-dash { color: #FF8C00; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; text-decoration: none; }
+        
+        .menu-item { padding: 12px 15px; border-radius: 8px; color: #b0b0b0; text-decoration: none; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; transition: 0.3s; font-size: 0.95rem; }
+        .menu-item svg { width: 18px; height: 18px; fill: currentColor; }
+        .menu-item:hover, .menu-item.active { background: rgba(46, 204, 113, 0.1); color: #2ECC71; }
+
+        .main-content { flex: 1; margin-left: 260px; padding: 40px; width: calc(100% - 260px); }
+        .settings-container { max-width: 750px; margin: 0 auto; }
+        
+        h1 { color: #f0f0f0; font-size: 1.6rem; font-weight: 600; margin-bottom: 25px; margin-top: 0; }
+        .section-card { background: #1e1e1e; border-radius: 12px; padding: 30px; margin-bottom: 30px; border: 1px solid #333; }
+        .section-card h2 { margin-top: 0; font-size: 1.1rem; color: #FF8C00; border-bottom: 1px solid #252525; padding-bottom: 15px; margin-bottom: 25px; font-weight: 500; }
+        
+        input, select { width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #333; background: #2b2b2b; color: #f0f0f0; outline: none; margin-bottom: 15px; box-sizing: border-box; transition: border-color 0.3s; }
+        input:focus, select:focus { border-color: #FF8C00; }
+        label { display: block; font-size: 0.85rem; color: #a0a0a0; margin-bottom: 8px; }
+        
+        .btn-save { background: #FF8C00; color: white; border: none; padding: 12px 30px; border-radius: 5px; font-weight: bold; cursor: pointer; float: right; text-transform: uppercase; font-size: 0.85rem; }
+        .btn-save:hover { background: #e67e00; }
+
+        @media (max-width: 768px) {
+            body { flex-direction: column; }
+            .sidebar { position: relative; width: 100%; height: auto; border-right: none; border-bottom: 1px solid #1a2e22; padding: 15px; }
+            .main-content { margin-left: 0; width: 100%; padding: 20px; }
+            .btn-save { width: 100%; float: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <a href="index.html" class="logo-dash" style="margin-bottom: 40px; display: block;">My Job Pro</a>
+        <a href="#" id="nav-dash-link" class="menu-item">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Dashboard
+        </a>
+        <a href="recherche-candidats.html" class="menu-item">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>Trouver des talents
+        </a>
+        <a href="messagerie.html" class="menu-item">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>Messages
+        </a>
+        <a href="#" class="menu-item active">
+            <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>Paramètres
+        </a>
+    </nav>
+
+    <main class="main-content">
+        <form id="global-settings-form" class="settings-container" onsubmit="saveSettings(event)">
+            <h1>Configuration du compte</h1>
+            
+            <div class="section-card">
+                <h2>Sécurité d'accès</h2>
+                <label for="set-username">Nom complet d'inscription</label>
+                <input type="text" id="set-username" readonly style="color:#777; cursor: not-allowed; background: #1a1a1a;">
+                
+                <label for="set-password">Modifier votre mot de passe (Laisser vide si inchangé)</label>
+                <input type="password" id="set-password" placeholder="Saisir un nouveau mot de passe">
+            </div>
+
+            <div class="section-card" id="geo-perimeter-card" style="display: none;">
+                <h2>Rayon de visibilité GPS (Interventions)</h2>
+                <label for="set-gps-radius">Périmètre maximal de visibilité autour de votre résidence</label>
+                <select id="set-gps-radius">
+                    <option value="5">5 km (Local uniquement)</option>
+                    <option value="15" selected>15 km (Abidjan Métropole)</option>
+                    <option value="50">50 km (Région entière)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-save">Enregistrer les réglages</button>
+        </form>
+    </main>
+
+    <script>
+        window.onload = function() {
+            const activeName = localStorage.getItem('user_fullname') || "Utilisateur Pro";
+            const userRole = localStorage.getItem('user_role');
+            
+            document.getElementById('set-username').value = activeName;
+
+            if (userRole === 'independant' || userRole === 'client') {
+                document.getElementById('geo-perimeter-card').style.display = 'block';
+                const savedRadius = localStorage.getItem('user_gps_radius');
+                if (savedRadius) document.getElementById('set-gps-radius').value = savedRadius;
+            }
+
+            // CORRECTION DES FLUX DE ROUTAGE RETOUR
+            const dashLink = document.getElementById('nav-dash-link');
+            if (userRole === 'independant') {
+                dashLink.href = "profil-independant.html";
+            } else if (userRole === 'client') {
+                dashLink.href = "espace-client.html";
+            } else if (userRole === 'recruteur') {
+                dashLink.href = "dashboard-recruteur.html";
+            } else {
+                dashLink.href = "espace-candidat.html";
+            }
+        };
+
+        function saveSettings(event) {
+            event.preventDefault();
+            const newPassword = document.getElementById('set-password').value;
+            const userRole = localStorage.getItem('user_role');
+
+            if (newPassword.trim() !== "") {
+                localStorage.setItem('user_password', newPassword);
+            }
+
+            if (userRole === 'independant' || userRole === 'client') {
+                const selectedRadius = document.getElementById('set-gps-radius').value;
+                localStorage.setItem('user_gps_radius', selectedRadius);
+            }
+
+            alert("✓ Vos préférences ont été enregistrées avec succès !");
+        }
+    </script>
+</body>
+</html>

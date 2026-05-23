@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Job Pro | Accueil</title>
+    <style>
+        /* CHARTE GRAPHISME UNIFIÉE INTÉGRÉE - MY JOB PRO (2026) */
+        body { 
+            background: #121212; 
+            color: #e0e0e0; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            margin: 0; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            box-sizing: border-box;
+        }
+        *, *:before, *:after { box-sizing: inherit; }
+
+        /* HEADER VERT NUIT */
+        header {
+            background: #0A1F13; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 15px 30px; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            border-bottom: 1px solid #1a2e22; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+        }
+        .logo-site { 
+            color: #FF8C00; 
+            font-size: 1.5rem; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            text-decoration: none; 
+        }
+
+        /* BARRE DE RECHERCHE CENTRALE */
+        .search-area { flex: 2; display: flex; justify-content: center; }
+        .search-container {
+            display: flex; 
+            background: rgba(255, 255, 255, 0.08); 
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 5px; 
+            padding: 4px; 
+            width: 100%; 
+            max-width: 450px;
+        }
+        .search-container input { 
+            background: transparent; 
+            border: none; 
+            color: white; 
+            padding: 8px 12px; 
+            width: 100%; 
+            outline: none; 
+        }
+        .btn-search { 
+            background: white; 
+            color: black; 
+            border: none; 
+            padding: 5px 15px; 
+            border-radius: 3px; 
+            font-weight: bold; 
+            cursor: pointer; 
+        }
+
+        /* NAVIGATION DROITE & BOUTONS */
+        .nav-actions { display: flex; justify-content: flex-end; align-items: center; gap: 15px; }
+        .nav-actions a { color: #ccc; text-decoration: none; font-size: 0.9rem; }
+        .btn-signup { 
+            background: #FF8C00; 
+            color: white !important; 
+            padding: 10px 22px; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            text-decoration: none;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        .btn-signup:hover { background: #e67e00; }
+
+        /* SÉLECTEUR DE LANGUE */
+        .custom-select { position: relative; cursor: pointer; color: #2ECC71; font-weight: bold; user-select: none; }
+        .select-items { 
+            position: absolute; 
+            background: #1e1e1e; 
+            border: 1px solid #333; 
+            top: 130%; 
+            right: 0; 
+            width: 140px; 
+            border-radius: 5px; 
+            display: none; 
+            z-index: 10000; 
+        }
+        .select-items div { padding: 10px; font-size: 0.85rem; display: flex; gap: 10px; color: white; text-align: left; }
+        .select-items div:hover { background: #2b2b2b; color: #FF8C00; }
+        .select-items.show { display: block; }
+
+        /* GRILLE DES PROFILS */
+        .main-container { 
+            flex: 1; 
+            display: flex; 
+            flex-direction: column;
+            justify-content: center; 
+            align-items: center; 
+            padding: 60px 20px;
+        }
+        .profiles { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; width: 100%; max-width: 1100px; }
+        .profiles a { text-decoration: none; color: inherit; display: block; }
+        
+        .profile-card { 
+            background: #1e1e1e; 
+            padding: 25px 25px; 
+            border-radius: 10px; 
+            width: 250px; 
+            text-align: center; 
+            border: 1px solid #222; 
+            box-sizing: border-box;
+            transition: 0.3s; 
+            height: 100%;
+        }
+        .profile-card:hover { transform: translateY(-5px); background: #252525; }
+        .profile-card h3 { color: white !important; margin-bottom: 10px; font-size: 1.1rem; margin-top: 0; font-weight: 600; }
+        .profile-card p { color: #888; font-size: 0.85rem; line-height: 1.4; margin: 0; }
+        
+        /* Harmonisation des bordures de rôles */
+        .independant { border-bottom: 5px solid #FF8C00; } 
+        .client { border-bottom: 5px solid #3498db; }
+        .candidat { border-bottom: 5px solid #2ECC71; }    
+        .recruteur { border-bottom: 5px solid #FFFFFF; }   
+        
+        .no-result { display: none; text-align: center; width: 100%; color: #ff4d4d; font-weight: bold; margin-top: 40px; font-size: 1.1rem; }
+        
+        footer { background: #0A1F13; padding: 25px; text-align: center; color: #555; font-size: 0.85rem; border-top: 1px solid #1a2e22; margin-top: auto; width: 100%; }
+
+        @media (max-width: 600px) {
+            header { flex-direction: column; text-align: center; padding: 15px; }
+            .search-area, .nav-actions { width: 100%; justify-content: center; }
+            .search-container { max-width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="#" class="logo-site">My Job Pro</a>
+        <div class="search-area">
+            <div class="search-container">
+                <input type="text" id="txt-search" placeholder="Rechercher une offre ou un profil..." oninput="filterProfiles()">
+                <button class="btn-search" onclick="executeSearchRedirect()">Rechercher</button>
+            </div>
+        </div>
+        <div class="nav-actions">
+            <div class="custom-select" onclick="toggleMenu(event)">
+                <span id="current-lang">🇫🇷 FR</span> ▾
+                <div class="select-items" id="lang-items">
+                    <div onclick="setLang('fr')"><span>🇫🇷</span> Français</div>
+                    <div onclick="setLang('en')"><span>🇬🇧</span> English</div>
+                    <div onclick="setLang('de')"><span>🇩🇪</span> Deutsch</div>
+                    <div onclick="setLang('es')"><span>🇪🇸</span> Español</div>
+                </div>
+            </div>
+            <a href="connexion.html">Connexion</a>
+            <a href="inscription.html" class="btn-signup" id="btn-signup">S'INSCRIRE</a>
+        </div>
+    </header>
+
+    <main class="main-container">
+        <div class="profiles" id="profiles-wrapper">
+            
+            <!-- Profil 1 : Travailleur Indépendant -->
+            <a href="espace-independant.html" class="profile-link" data-keywords="travailleur independant freelance mission activite liberté plombier electricien taxi artisan">
+                <div class="profile-card independant">
+                    <h3 id="profile-ind">Travailleur Indépendant</h3>
+                    <p id="desc-ind">Profils vérifiés par pièces et géolocalisés.</p>
+                </div>
+            </a>
+
+            <!-- Profil 2 : Client Particulier -->
+            <a href="espace-client.html" class="profile-link" data-keywords="client particulier maison depannage nounou commander service acheteur">
+                <div class="profile-card client">
+                    <h3 id="profile-cli">Client Particulier</h3>
+                    <p id="desc-cli">Commandez des interventions de proximité sécurisées.</p>
+                </div>
+            </a>
+
+            <!-- Profil 3 : Candidat -->
+            <a href="espace-candidat.html" class="profile-link" data-keywords="candidat emploi offre stage diplome cv travail cv junior postuler">
+                <div class="profile-card candidat">
+                    <h3 id="profile-can">Candidat</h3>
+                    <p id="desc-can">Postulez aux meilleures offres d'emploi.</p>
+                </div>
+            </a>
+
+            <!-- Profil 4 : Recruteur -->
+            <a href="espace-recruteur.html" class="profile-link" data-keywords="recruteur entreprise embauche talent expert projet offre affiche societe structure">
+                <div class="profile-card recruteur">
+                    <h3 id="profile-rec">Recruteur</h3>
+                    <p id="desc-rec">Trouvez vos futurs talents.</p>
+                </div>
+            </a>
+
+        </div>
+        <div id="no-match" class="no-result">Aucun profil ne correspond à votre recherche.</div>
+    </main>
+
+    <footer>&copy; <span id="year">2026</span> My Job Pro. Tous droits réservés.</footer>
+
+    <script>
+        function filterProfiles() {
+            const query = document.getElementById('txt-search').value.toLowerCase().trim();
+            const links = document.querySelectorAll('.profile-link');
+            const noMatchDiv = document.getElementById('no-match');
+            let matchCount = 0;
+
+            links.forEach(link => {
+                const keywords = link.getAttribute('data-keywords').toLowerCase();
+                if (query === "" || keywords.includes(query)) {
+                    link.style.display = "block";
+                    matchCount++;
+                } else {
+                    link.style.display = "none";
+                }
+            });
+
+            noMatchDiv.style.display = (matchCount === 0) ? "block" : "none";
+        }
+
+        function executeSearchRedirect() {
+            const query = document.getElementById('txt-search').value.trim();
+            if (query !== "") {
+                window.location.href = 'recherche-candidats.html?q=' + encodeURIComponent(query);
+            }
+        }
+
+        function toggleMenu(event) {
+            event.stopPropagation();
+            document.getElementById('lang-items').classList.toggle('show');
+        }
+
+        function setLang(lang) {
+            const currentLangSpan = document.getElementById('current-lang');
+            const btnSignup = document.getElementById('btn-signup');
+            
+            if (lang === 'fr') {
+                currentLangSpan.innerHTML = "🇫🇷 FR";
+                document.getElementById('profile-ind').textContent = "Travailleur Indépendant";
+                document.getElementById('desc-ind').textContent = "Profils vérifiés par pièces et géolocalisés.";
+                document.getElementById('profile-cli').textContent = "Client Particulier";
+                document.getElementById('desc-cli').textContent = "Commandez des interventions de proximité sécurisées.";
+                document.getElementById('profile-can').textContent = "Candidat";
+                document.getElementById('desc-can').textContent = "Postulez aux meilleures offres d'emploi.";
+                document.getElementById('profile-rec').textContent = "Recruteur";
+                document.getElementById('desc-rec').textContent = "Trouvez vos futurs talents.";
+                btnSignup.textContent = "S'INSCRIRE";
+                document.getElementById('no-match').textContent = "Aucun profil ne correspond à votre recherche.";
+            } else if (lang === 'en') {
+                currentLangSpan.innerHTML = "🇬🇧 EN";
+                document.getElementById('profile-ind').textContent = "Freelancer / Independent";
+                document.getElementById('desc-ind').textContent = "ID-verified profiles with geolocation tracking.";
+                document.getElementById('profile-cli').textContent = "Private Client";
+                document.getElementById('desc-cli').textContent = "Order secure and reliable local home services.";
+                document.getElementById('profile-can').textContent = "Job Applicant";
+                document.getElementById('desc-can').textContent = "Apply to the best corporate career opportunities.";
+                document.getElementById('profile-rec').textContent = "Recruiter / Employer";
+                document.getElementById('desc-rec').textContent = "Find and hire your future top talents easily.";
+                btnSignup.textContent = "SIGN UP";
+                document.getElementById('no-match').textContent = "No profile matches your current search criteria.";
+            }
+        }
+
+        window.onclick = function() {
+            const dropdown = document.getElementById('lang-items');
+            if (dropdown && dropdown.classList.contains('show')) {
+                dropdown.classList.remove('show');
+            }
+        }
+    </script>
+</body>
+</html>

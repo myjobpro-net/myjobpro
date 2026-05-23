@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messagerie Sécurisée Internationale | My Job Pro</title>
+    <style>
+        html, body { max-width: 100%; overflow-x: hidden; margin: 0; padding: 0; background: #121212; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; display: flex; flex-direction: column; }
+        *, *:before, *:after { box-sizing: border-box; }
+        
+        .sidebar { width: 260px; background: #0A1F13; border-right: 1px solid #1a2e22; display: flex; flex-direction: column; padding: 20px; position: fixed; height: 100vh; z-index: 100; }
+        .logo-site { color: #FF8C00; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; text-decoration: none; }
+        .menu-item { padding: 12px 15px; border-radius: 8px; color: #b0b0b0; text-decoration: none; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; transition: 0.3s; font-size: 0.95rem; cursor: pointer; }
+        .menu-item:hover { background: rgba(46, 204, 113, 0.1); color: #2ECC71; }
+        
+        .chat-container { flex: 1; display: flex; margin-left: 260px; height: 100vh; background: #1e1e1e; }
+        .chat-window { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        .chat-header { padding: 15px 25px; border-bottom: 1px solid #333; display: flex; align-items: center; justify-content: space-between; background: #1e1e1e; }
+        .chat-header h3 { margin: 0; font-size: 1.1rem; color: #f0f0f0; }
+        
+        .messages-area { flex: 1; padding: 25px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: #121212; }
+        .msg { max-width: 75%; padding: 12px 16px; border-radius: 12px; font-size: 0.9rem; line-height: 1.5; word-wrap: break-word; }
+        .msg.received { background: #2b2b2b; color: #e0e0e0; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .msg.sent { background: #0A1F13; color: #2ECC71; align-self: flex-end; border-bottom-right-radius: 2px; border: 1px solid #1a2e22; }
+        
+        .chat-input-area { padding: 20px; border-top: 1px solid #333; display: flex; gap: 10px; background: #1e1e1e; }
+        .chat-input-area input { width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #333; background: #2b2b2b; color: #f0f0f0; outline: none; }
+        .btn-send { background: #FF8C00; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+        .btn-action-chat { background: #1a2e22; border: 1px solid #2ECC71; color: #2ECC71; padding: 8px 14px; border-radius: 4px; font-size: 0.8rem; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-action-chat:hover { background: #2ECC71; color: black; }
+
+        /* MODALE MONDIALE DU SÉQUESTRE */
+        .payment-modal { display: none; position: fixed; z-index: 20000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); }
+        .payment-box { background: #1e1e1e; max-width: 480px; width: 90%; margin: 10% auto; padding: 30px; border-radius: 12px; border-top: 5px solid #2ECC71; border: 1px solid #333; text-align: center; }
+        .invoice-breakdown { background: #252525; border-radius: 6px; padding: 15px; margin-top: 15px; border: 1px solid #333; text-align: left; }
+        .invoice-line { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px; color: #a0a0a0; }
+        .invoice-line.total { border-top: 1px dashed #444; padding-top: 8px; margin-bottom: 0; font-weight: bold; color: #FF8C00; }
+        .fee-badge { background: rgba(46, 204, 113, 0.15); color: #2ECC71; border: 1px solid #2ECC71; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; }
+        .checkbox-secure { display: flex; align-items: flex-start; gap: 10px; text-align: left; margin-top: 15px; font-size: 0.85rem; }
+
+        @media (max-width: 900px) { .sidebar { position: relative; width: 100%; height: auto; padding: 15px; } .chat-container { margin-left: 0; flex-direction: column; } }
+    </style>
+</head>
+<body>
+
+    <nav class="sidebar">
+        <a href="index.html" class="logo-site" style="margin-bottom: 20px; display: block;">My Job Pro</a>
+        <a class="menu-item" onclick="window.location.href='connexion.html'">🏠 Mon Espace</a>
+        <a class="menu-item" onclick="window.location.href='recherche-candidats.html'">📍 Trouver un Talent</a>
+    </nav>
+
+    <div class="chat-container">
+        <div class="chat-window">
+            <div class="chat-header">
+                <h3 id="chat-title">Salon Privé International</h3>
+                <!-- Le prix de la prestation s'adapte au marché (Ex: 35 000 FCFA ou 150 € selon le pays) -->
+                <button class="btn-action-chat" id="btn-escrow-action">💼 Déposer un Séquestre</button>
+            </div>
+            <div class="messages-area" id="messages-container"></div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-text-input" placeholder="Écrivez votre message protégé..." onkeypress="if(event.key==='Enter') sendChatMessageCloud()">
+                <button class="btn-send" onclick="sendChatMessageCloud()">➔</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODALE DU SÉQUESTRE AVEC DEVISE AUTOMATIQUE -->
+    <div id="paymentModal" class="payment-modal">
+        <div class="payment-box">
+            <h2 style="margin-top:0; color:#2ECC71;">Garantie Séquestre Internationale</h2>
+            <p style="font-size:0.9rem; color:#b0b0b0;">Les fonds sont bloqués de manière transparente sur My Job Pro et libérés à la livraison.</p>
+            
+            <div class="invoice-breakdown">
+                <div class="invoice-line"><span>Tarif estimé de la prestation</span><span id="modal-raw-price">0 --</span></div>
+                <div class="invoice-line"><span>Frais My Job Pro <span class="fee-badge">10%</span></span><span id="modal-fee-price">0 --</span></div>
+                <div class="invoice-line total"><span>Montant total à charger</span><span id="modal-total-price">0 --</span></div>
+            </div>
+
+            <div class="checkbox-secure">
+                <input type="checkbox" id="secureAgree">
+                <label for="secureAgree">Je valide les termes contractuels mondiaux et j'autorise le gel temporaire de cette somme.</label>
+            </div>
+
+            <div style="display:flex; gap:10px; justify-content:center; margin-top:20px;">
+                <button class="btn-action-chat" style="background:#333; border-color:#444; color:white;" onclick="closePaymentModal()">Annuler</button>
+                <button class="btn-action-chat" style="background:#2ECC71; color:black;" onclick="confirmEscrowDeposit()">Confirmer</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ⚠️ INSÉREZ VOS CLÉS SUPABASE ICI ⚠️
+        const CONFIG_SUPABASE_URL = "https://hqnhkzhckgytgxafflcx.supabase.co"; 
+        const CONFIG_SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbmhremhja2d5dGd4YWZmbGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5NTIsImV4cCI6MjA5NDk2Nzk1Mn0.lbvq-Xwo3fQP5UGBMROA4PafWWmF_B5PUiYx7NN3FxQ";              
+
+        const monEmail = localStorage.getItem('user_email') || "client@mail.com";
+        const sonEmail = localStorage.getItem('chat_interlocuteur_email') || "artisan@mail.com";
+        
+        let rawPrestationPrice = 0;
+        let deviseLocale = "USD"; // Devise internationale par défaut
+
+        window.onload = function() {
+            document.getElementById('chat-title').textContent = `Discussion sécurisée avec : \${sonEmail}`;
+            detecterDeviseEtTarifParPays();
+            loadCloudMessagesDirect();
+            setInterval(loadCloudMessagesDirect, 3500); // Écoute cloud en tâche de fond
+        };
+
+        // STYLE YANGO MONDIAL : Calcule le prix type selon la monnaie du pays détecté
+        async function detecterDeviseEtTarifParPays() {
+            try {
+                const reponseZone = await fetch("https://ipapi.co");
+                const zone = await reponseZone.json();
+                deviseLocale = zone.currency || "USD";
+                
+                // Calibration automatique du bouton de séquestre de test selon la richesse locale
+                if (deviseLocale === "XOF" || deviseLocale === "XAF") {
+                    rawPrestationPrice = 25000; // 25 000 FCFA par défaut en Afrique de l'Ouest/Centrale
+                } else if (deviseLocale === "EUR") {
+                    rawPrestationPrice = 75; // 75 € par défaut en Europe
+                } else {
+                    rawPrestationPrice = 100; // 100 \$ par défaut dans le reste du monde
+                }
+                
+                document.getElementById('btn-escrow-action').onclick = function() { openPaymentModal(rawPrestationPrice); };
+            } catch (e) {
+                document.getElementById('btn-escrow-action').onclick = function() { openPaymentModal(100); };
+            }
+        }
+
+        // PROTECTION DE LA COMMISSION DU MARCHÉ CONTRE LA FRAUDE TEXTUELLE [upwork.com, fiverr.com]
+        function verifierFraudeSémantique(texte) {
+            const txt = texte.toLowerCase();
+            const motsInterdits = ["whatsapp", "watsap", "paypal", "téléphone", "numero", "numéro", "email", "e-mail", "mon mail", "+225", "+33"];
+            for (let mot of motsInterdits) { if (txt.includes(mot)) return true; }
+            if (/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(txt)) return true;
+            return false;
+        }
+
+        // CHARGEMENT SYNCHRONISÉ DIRECT SANS SDK EXTERNE
+        async function loadCloudMessagesDirect() {
+            try {
+                const urlGet = `\${CONFIG_SUPABASE_URL}/rest/v1/messages?select=*&order=created_at.asc`;
+                const reponse = await fetch(urlGet, {
+                    method: 'GET',

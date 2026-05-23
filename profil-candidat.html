@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil | My Job Pro</title>
+    <style>
+        /* CHARTE GRAPHISME INTÉGRÉE POUR L'AUTONOMIE DU FICHIER */
+        body { 
+            background: #121212; 
+            color: #e0e0e0; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            margin: 0; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            box-sizing: border-box;
+        }
+        *, *:before, *:after { box-sizing: inherit; }
+
+        header {
+            background: #0A1F13; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 15px 30px; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            border-bottom: 1px solid #1a2e22; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+        }
+        .logo-site { color: #FF8C00; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; text-decoration: none; }
+        
+        .btn-signup { 
+            background: #2ECC71; 
+            color: black !important; 
+            padding: 10px 22px; 
+            border-radius: 5px; 
+            font-weight: bold; 
+            text-decoration: none; 
+            border: none; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+        .btn-signup:hover { background: #27ae60; }
+        .btn-signup svg { width: 16px; height: 16px; fill: black; }
+
+        .btn-logout { background: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 0.85rem; }
+        .btn-logout:hover { background: #ff4d4d; color: white; }
+
+        .profile-container { max-width: 1000px; width: 100%; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 280px 1fr; gap: 30px; flex: 1; }
+        .profile-sidebar { background: #1e1e1e; padding: 30px 20px; border-radius: 12px; border: 1px solid #333; text-align: center; height: fit-content; border-bottom: 5px solid #2ECC71; }
+        .profile-main { display: flex; flex-direction: column; gap: 30px; min-width: 0; }
+        
+        .section-card { background: #1e1e1e; border-radius: 12px; padding: 30px; border: 1px solid #333; position: relative; }
+        .section-card h2 { margin-top: 0; font-size: 1.2rem; color: #FF8C00; border-bottom: 1px solid #333; padding-bottom: 12px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .btn-add { background: transparent; border: 1px solid #2ECC71; color: #2ECC71; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; font-weight: bold; transition: 0.3s; }
+        .btn-add:hover { background: #2ECC71; color: black; }
+        
+        input, select, textarea { width: 100%; padding: 12px; border-radius: 5px; border: 1px solid #333; background: #2b2b2b; color: #f0f0f0; outline: none; transition: 0.3s; box-sizing: border-box; }
+        input:focus, textarea:focus { border-color: #FF8C00; }
+        label { display: block; margin-top: 15px; margin-bottom: 8px; font-size: 0.85rem; color: #b0b0b0; text-align: left; }
+
+        .list-item { background: #2b2b2b; padding: 15px; border-radius: 6px; margin-bottom: 15px; border-left: 3px solid #2ECC71; position: relative; text-align: left; }
+        .list-item h4 { margin: 0 0 5px 0; color: white; font-size: 1rem; padding-right: 30px; }
+        .list-item p { margin: 0; color: #888; font-size: 0.85rem; line-height: 1.4; }
+        .list-item .date { color: #FF8C00; font-weight: bold; font-size: 0.8rem; margin-top: 5px; display: block; }
+        
+        .btn-delete { 
+            position: absolute; 
+            right: 15px; 
+            top: 15px; 
+            background: transparent; 
+            border: none; 
+            color: #ff6b6b; 
+            cursor: pointer; 
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        .btn-delete:hover { background: rgba(255, 107, 107, 0.1); color: #ff4d4d; }
+        .btn-delete svg { width: 16px; height: 16px; fill: currentColor; }
+
+        .inline-form { display: none; background: #252525; padding: 20px; border-radius: 6px; margin-bottom: 20px; border: 1px solid #444; text-align: left; }
+        .form-row { display: flex; gap: 15px; margin-bottom: 15px; }
+        .form-row div { flex: 1; }
+
+        .skills-zone { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; }
+        .skill-tag { background: #0A1F13; color: #2ECC71; border: 1px solid #1a2e22; padding: 6px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: bold; display: flex; align-items: center; gap: 8px; }
+        .skill-tag span { cursor: pointer; color: #ff4d4d; font-weight: bold; }
+
+        @media print {
+            body { background: white !important; color: black !important; }
+            header, .profile-sidebar, .btn-add, .btn-delete, .inline-form, form, input, button, .btn-signup, select { display: none !important; }
+            .profile-container { grid-template-columns: 1fr; margin: 0; padding: 0; max-width: 100%; }
+            .section-card { background: transparent !important; border: none !important; padding: 10px 0 !important; }
+            .section-card h2 { color: #FF8C00 !important; border-bottom: 1px solid #ccc !important; }
+            .list-item { background: #f5f5f5 !important; border-left: 3px solid #2ECC71 !important; color: black !important; }
+            .list-item h4 { color: black !important; }
+            .list-item p { color: #444 !important; }
+            .skill-tag { background: #e0e0e0 !important; color: black !important; border: 1px solid #ccc !important; }
+            .skill-tag span { display: none !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-site">My Job Pro</a>
+        <div class="nav-right">
+            <button class="btn-signup" onclick="window.print()">
+                <svg viewBox="0 0 24 24">
+                    <path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/>
+                </svg>
+                Exporter en PDF
+            </button>
+            <a href="javascript:void(0)" onclick="handleLogout()" class="btn-logout" style="margin-left: 15px;">DÉCONNEXION</a>
+        </div>
+    </header>
+
+    <div class="profile-container">
+        <aside class="profile-sidebar">
+            <div style="width: 100px; height: 100px; background: #2b2b2b; border-radius: 50%; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; font-size: 3rem; border: 2px solid #2ECC71;">👤</div>
+            <h3 style="margin: 0 0 5px 0;" id="cand-name">Candidat</h3>
+            <p style="margin: 0 0 20px 0; color: #2ECC71; font-size: 0.85rem; font-weight: bold;">Profil Évolutif</p>
+            <p style="color: #bbb; font-size: 0.85rem; line-height: 1.5; margin: 0;">Déterminé à mettre mes compétences théoriques et mes projets au service des entreprises.</p>
+        </aside>
+
+        <main class="profile-main">
+            <!-- SECTION COMPÉTENCES -->
+            <div class="section-card">
+                <h2>Mes Compétences & Outils</h2>
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="skill-input" placeholder="Ex: HTML, Rigueur, Relationnel...">
+                    <button class="btn-signup" style="border:none; cursor:pointer; width: auto; background:#FF8C00; color:white !important;" onclick="addSkill()">Ajouter</button>
+                </div>
+                <div class="skills-zone" id="skills-container"></div>
+            </div>
+
+            <!-- SECTION EXPÉRIENCES -->
+            <div class="section-card">
+                <h2>Expériences Professionnelles <button class="btn-add" onclick="toggleForm('exp-form')">+ Ajouter</button></h2>
+                
+                <div class="inline-form" id="exp-form">
+                    <div class="form-row">
+                        <div><label>Poste / Intitulé</label><input type="text" id="exp-title"></div>
+                        <div><label>Employeur / Structure</label><input type="text" id="exp-company"></div>
+                    </div>
+                    <div class="form-row">
+                        <div><label>Période (Dates)</label><input type="text" id="exp-dates" placeholder="Ex: 2025 — 2026"></div>
+                        <div><label>Résultat majeur</label><input type="text" id="exp-result" placeholder="Ex: Rénovation réussie"></div>
+                    </div>
+                    <label>Description des missions</label>
+                    <textarea id="exp-desc" rows="3"></textarea>
+                    <div style="margin-top:15px; text-align:right;">
+                        <button class="btn-add" style="background:#2ECC71; color:black;" onclick="saveExperience()">Enregistrer</button>
+                    </div>
+                </div>
+
+                <div id="experiences-container"></div>
+            </div>
+
+            <!-- SECTION FORMATIONS -->
+            <div class="section-card">
+                <h2>Formations & Diplômes <button class="btn-add" onclick="toggleForm('edu-form')">+ Ajouter</button></h2>
+                
+                <div class="inline-form" id="edu-form">
+                    <div class="form-row">
+                        <div><label>Intitulé du Diplôme</label><input type="text" id="edu-title"></div>
+                        <div><label>Établissement / École</label><input type="text" id="edu-school"></div>
+                    </div>
+                    <label>Année d'obtention</label>
+                    <input type="text" id="edu-date" placeholder="Ex: 2025">
+                    <div style="margin-top:15px; text-align:right;">
+                        <button class="btn-add" style="background:#2ECC71; color:black;" onclick="saveEducation()">Enregistrer</button>
+                    </div>
+                </div>
+
+                <div id="education-container"></div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        let skills = [];
+        let experiences = [];
+        let education = [];
+
+        window.onload = function() {
+            // Synchronisation de l'identité du candidat
+            const name = localStorage.getItem('user_fullname') || "Candidat Alternant";
+            document.getElementById('cand-name').textContent = name;
+
+            // Chargement persistant
+            skills = JSON.parse(localStorage.getItem('cand_skills')) || ["HTML5", "CSS3", "JavaScript", "Rigueur"];
+            experiences = JSON.parse(localStorage.getItem('cand_exps')) || [
+                { title: "Stage Développeur Front-End", company: "Tech Studio Afrique", dates: "Janvier — Juin 2025", result: "Rendement UI/UX fluide", desc: "Intégration d'architectures Single Page Application responsive." }
+            ];
+            education = JSON.parse(localStorage.getItem('cand_edus')) || [
+                { title: "BTS Informatique Développeur d'Applications", school: "IST Abidjan", date: "2024" }
+            ];
+
+            renderSkills();
+            renderExperiences();
+            renderEducation();
+        };
+
+        function toggleForm(id) {
+            const form = document.getElementById(id);
+            form.style.display = (form.style.display === 'block') ? 'none' : 'block';
+        }
+
+        // GESTION COMPÉTENCES
+        function renderSkills() {
+            const container = document.getElementById('skills-container');
+            container.innerHTML = '';
+            skills.forEach((skill, index) => {
+                const tag = document.createElement('div');
+                tag.className = 'skill-tag';
+                tag.innerHTML = `\${skill} <span onclick="deleteSkill(\${index})">&times;</span>`;
+                container.appendChild(tag);
+            });
+            localStorage.setItem('cand_skills', JSON.stringify(skills));
+        }
+
+        function addSkill() {
+            const input = document.getElementById('skill-input');
+            const val = input.value.trim();
+            if (val && !skills.includes(val)) {
+                skills.push(val);
+                input.value = '';
+                renderSkills();
+            }
+        }
+
+        function deleteSkill(index) {
+            skills.splice(index, 1);
+            renderSkills();
+        }
+
+        // GESTION EXPÉRIENCES
+        function renderExperiences() {
+            const container = document.getElementById('experiences-container');
+            container.innerHTML = '';
+            experiences.forEach((exp, index) => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <button class="btn-delete" onclick="deleteExperience(\${index})">
+                        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                    </button>
+                    <h4>\${exp.title}</h4>
+                    <p><strong>\${exp.company}</strong></p>
+                    <p style="margin-top: 5px; color: #b0b0b0;">\${exp.desc}</p>
+                    <span class="date">\${exp.dates} — \${exp.result}</span>
+                `;
+                container.appendChild(item);
+            });
+            localStorage.setItem('cand_exps', JSON.stringify(experiences));
+        }
+
+        function saveExperience() {
+            const title = document.getElementById('exp-title').value.trim();
+            const company = document.getElementById('exp-company').value.trim();
+            const dates = document.getElementById('exp-dates').value.trim();
+            const result = document.getElementById('exp-result').value.trim();
+            const desc = document.getElementById('exp-desc').value.trim();
+
+            if (title && company) {
+                experiences.push({ title, company, dates, result, desc });
+                renderExperiences();
+                toggleForm('exp-form');
+                // Nettoyage
+                document.getElementById('exp-title').value = '';
+                document.getElementById('exp-company').value = '';
+                document.getElementById('exp-dates').value = '';
+                document.getElementById('exp-result').value = '';
+                document.getElementById('exp-desc').value = '';
+            } else {
+                alert("Veuillez remplir au moins l'intitulé du poste et l'employeur.");
+            }
+        }
+
+        function deleteExperience(index) {
+            if(confirm("Supprimer cette expérience ?")) {
+                experiences.splice(index, 1);
+                renderExperiences();
+            }
+        }
+
+        // GESTION FORMATIONS
+        function renderEducation() {
+            const container = document.getElementById('education-container');
+            container.innerHTML = '';
+            education.forEach((edu, index) => {
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `
+                    <button class="btn-delete" onclick="deleteEducation(\${index})">
+                        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                    </button>
+                    <h4>\${edu.title}</h4>
+                    <p>\${edu.school}</p>
+                    <span class="date">Diplôme obtenu en \${edu.date}</span>
+                `;
+                container.appendChild(item);
+            });
+            localStorage.setItem('cand_edus', JSON.stringify(education));
+        }
+
+        function saveEducation() {
+            const title = document.getElementById('edu-title').value.trim();
+            const school = document.getElementById('edu-school').value.trim();
+            const date = document.getElementById('edu-date').value.trim();
+
+            if (title && school) {
+                education.push({ title, school, date });
+                renderEducation();
+                toggleForm('edu-form');
+                document.getElementById('edu-title').value = '';
+                document.getElementById('edu-school').value = '';
+                document.getElementById('edu-date').value = '';
+            } else {
+                alert("Veuillez renseigner le diplôme et l'établissement.");
+            }
+        }
+
+        function deleteEducation(index) {
+            if(confirm("Supprimer cette ligne de formation ?")) {
+                education.splice(index, 1);
+                renderEducation();
+            }
+        }
+
+        function handleLogout() {
+            if(confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+                localStorage.removeItem('user_role');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termes Juridiques & Mentions Légales | My Job Pro</title>
+    <style>
+        /* CHARTE GRAPHIQUE UNIFIÉE INTÉGRÉE */
+        body { 
+            background: #121212; 
+            color: #e0e0e0; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            margin: 0; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            box-sizing: border-box;
+        }
+        *, *:before, *:after { box-sizing: inherit; }
+
+        header {
+            background: #0A1F13; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 15px 30px; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000;
+            border-bottom: 1px solid #1a2e22; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+        }
+        .logo-site { color: #FF8C00; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; text-decoration: none; }
+        .btn-back { color: #2ECC71; text-decoration: none; font-weight: bold; font-size: 0.9rem; }
+
+        .legal-container { max-width: 800px; width: 100%; margin: 40px auto; padding: 0 20px; flex: 1; }
+        .legal-box { background: #1e1e1e; padding: 40px; border-radius: 12px; border: 1px solid #333; border-top: 5px solid #FF8C00; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        
+        h1 { color: #ffffff; font-size: 1.8rem; font-weight: 700; margin-bottom: 10px; margin-top: 0; }
+        .date-update { color: #2ECC71; font-size: 0.85rem; font-weight: bold; text-transform: uppercase; margin-bottom: 30px; letter-spacing: 0.5px; }
+        
+        /* Style pour le badge d'acceptation dynamique */
+        .status-accepted { background: rgba(46, 204, 113, 0.15); color: #2ECC71; border: 1px solid #2ECC71; padding: 5px 12px; border-radius: 4px; display: inline-block; font-size: 0.8rem; font-weight: bold; margin-bottom: 30px; text-transform: uppercase; }
+
+        h2 { color: #FF8C00; font-size: 1.2rem; font-weight: 600; margin-top: 30px; margin-bottom: 12px; border-bottom: 1px solid #252525; padding-bottom: 8px; }
+        p, li { color: #b0b0b0; font-size: 0.9rem; line-height: 1.6; }
+        ul { padding-left: 20px; }
+        li { margin-bottom: 8px; }
+        
+        /* Encadré de rappel de responsabilité de la plateforme */
+        .alert-legal { background: rgba(46, 204, 113, 0.05); border-left: 4px solid #2ECC71; padding: 15px; border-radius: 4px; margin: 20px 0; font-size: 0.85rem; color: #d0d0d0; line-height: 1.5; }
+        
+        footer { background: #0A1F13; padding: 25px; text-align: center; color: #555; font-size: 0.85rem; border-top: 1px solid #1a2e22; margin-top: auto; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-site">My Job Pro</a>
+        <div class="nav-right"><a href="index.html" id="back-link" class="btn-back">← Retour Accueil</a></div>
+    </header>
+
+    <div class="legal-container">
+        <div class="legal-box">
+            <h1>Termes Juridiques & Conditions d'Utilisation</h1>
+            
+            <!-- Zone dynamique modifiée par le script -->
+            <div id="legal-status-area" class="date-update">Mise à jour réglementaire : Mai 2026</div>
+
+            <p>L'utilisation de la plateforme <strong>My Job Pro</strong> implique l'acceptation pleine et entière des présentes conditions générales d'utilisation, édictées conformément à la législation en vigueur en République de Côte d'Ivoire.</p>
+
+            <h2>1. Éditeur de la Plateforme</h2>
+            <p>Le site est édité et géré par le Laboratoire d'Architecture Logicielle My Job Pro, domicilié à Abidjan, Côte d'Ivoire. Pour toute réclamation, signalement ou demande de traçabilité, les utilisateurs peuvent soumettre un ticket via leur interface sécurisée.</p>
+
+            <h2>2. Protection des Données Personnelles (Loi n°2013-450 & ARTCI)</h2>
+            <p>Conformément aux directives de l'<strong>ARTCI</strong>, My Job Pro applique une politique stricte de confidentialité des informations récoltées :</p>
+            <ul>
+                <li><strong>Photos et identités obligatoires :</strong> Les photos de profil et pièces d’identité (CNI / Passeport) sont exclusivement utilisées à des fins de vérification de conformité de l'artisan et de protection anti-fraude.</li>
+                <li><strong>Données de Géolocalisation :</strong> La collecte des coordonnées GPS réelles s'effectue uniquement avec le consentement explicite de l’utilisateur pour la mise en relation terrain.</li>
+                <li><strong>Droit d'accès et de suppression :</strong> Chaque membre dispose d'un droit de rectification ou de suppression totale de ses traces numériques depuis l'onglet Paramètres.</li>
+            </ul>
+
+            <h2>3. Conditions Financières & Commissions Marketplace</h2>
+            <p>My Job Pro prélève des frais de service contractuels fixés à un taux unique de <strong>10 % (dix pour cent)</strong> sur la valeur brute des transactions validées par le système de séquestre ou lors de l'exécution d'un paiement physique direct par Code QR sur le terrain. Le calcul transparent du montant d'affichage est géré de manière automatisée par la formule de notre API.</p>
+
+            <h2>4. Module de Garantie Anti-Fraude et Archivage des Preuves</h2>
+            <div class="alert-legal">
+                <strong>Valeur Probatoire du Journal Technique :</strong> Lorsqu'un employeur coche la case de validation de garantie QR, le système consigne de manière infalsifiable un bloc d'empreintes numériques (horodatage, validation, coordonnées GPS respectives). Ce journal des preuves (Evidence Log) possède une valeur juridique contractuelle et sera opposable devant l'ARTCI ou les autorités compétentes ivoiriennes en cas de litige pour travail frauduleux ou défaut de paiement.
+            </div>
+
+            <h2>5. Service Premium & Abonnement</h2>
+            <p>L'activation de l'Abonnement Premium (au tarif de 9.500 FCFA par mois) constitue un engagement unilatéral du travailleur indépendant pour l'achat de visibilité prioritaire sur le moteur d'exploration de la plateforme. Ce service commercial n'altère en rien l'obligation de l'artisan de fournir un travail conforme aux règles de l'art.</p>
+        </div>
+    </div>
+
+    <footer>
+        <div>&copy; 2026 My Job Pro. Document conforme aux règles ARTCI Côte d'Ivoire.</div>
+    </footer>
+
+    <!-- SCRIPT DE SYNCHRONISATION ET REDIRECTION DYNAMIQUE -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            // 1. Détection dynamique du consentement
+            const isAccepted = localStorage.getItem('cgu_accepted');
+            if (isAccepted === 'true') {
+                const statusArea = document.getElementById('legal-status-area');
+                statusArea.className = "status-accepted";
+                statusArea.textContent = "✓ Vous avez accepté ces termes généraux";
+            }
+
+            // 2. Redirection intelligente pour le bouton Retour
+            const userRole = localStorage.getItem('user_role');
+            const backLink = document.getElementById('back-link');
+            
+            if (userRole) {
+                backLink.textContent = "← Retour à mon Espace";
+                if (userRole === 'independant') {
+                    backLink.href = "espace-independant.html";
+                } else if (userRole === 'client') {
+                    backLink.href = "espace-client.html";
+                } else if (userRole === 'recruteur') {
+                    backLink.href = "espace-recruteur.html";
+                } else if (userRole === 'candidat') {
+                    backLink.href = "espace-candidat.html";
+                }
+            }
+        });
+    </script>
+</body>
+</html>

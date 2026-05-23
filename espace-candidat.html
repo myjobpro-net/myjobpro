@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Espace Candidat | My Job Pro</title>
+    <style>
+        /* CONFIGURATION UNIVERSELLE DE DISPOSITION FINANCIÈRE */
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            background: #121212; 
+            color: #e0e0e0; 
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+        }
+        *, *:before, *:after { box-sizing: border-box; }
+
+        header { background: #0A1F13; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #1a2e22; }
+        .logo-site { color: #FF8C00; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; text-decoration: none; }
+        .btn-logout { background: transparent; border: 1px solid #ff4d4d; color: #ff4d4d; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 0.85rem; }
+
+        .dashboard-container { max-width: 1000px; width: 100%; margin: 30px auto; padding: 0 20px; display: grid; grid-template-columns: 260px 1fr; gap: 30px; flex: 1; }
+        .sidebar-user { background: #1e1e1e; padding: 25px 20px; border-radius: 12px; border: 1px solid #333; height: fit-content; text-align: center; border-bottom: 5px solid #2ECC71; }
+        .dashboard-main { display: flex; flex-direction: column; gap: 30px; min-width: 0; }
+        
+        .section-card { background: #1e1e1e; border-radius: 12px; padding: 30px; border: 1px solid #333; }
+        .section-card h2 { margin-top: 0; font-size: 1.2rem; color: #FF8C00; border-bottom: 1px solid #333; padding-bottom: 12px; margin-bottom: 20px; }
+
+        .wallet-card { background: #0A1F13; border: 1px solid #1a2e22; border-radius: 12px; padding: 25px; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .wallet-balance h5 { margin: 0; color: #a0a0a0; font-size: 0.85rem; text-transform: uppercase; }
+        .wallet-balance h2 { margin: 5px 0 0 0; color: #2ECC71; font-size: 1.8rem; }
+        .btn-signup { background: #FF8C00; color: white; padding: 12px 22px; border-radius: 5px; font-weight: bold; text-decoration: none; border: none; cursor: pointer; text-transform: uppercase; font-size: 0.85rem; }
+
+        .qr-scanner-box { background: #1a1a1a; border: 2px dashed #444; border-radius: 12px; padding: 30px; text-align: center; margin: 20px 0; position: relative; }
+        
+        .transaction-list { display: flex; flex-direction: column; gap: 15px; }
+        .transaction-item { background: #2b2b2b; padding: 20px; border-radius: 8px; border-left: 4px solid #2ECC71; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .transaction-item.debited { border-left-color: #e74c3c; }
+        .tx-details h4 { margin: 0 0 5px 0; font-size: 1.05rem; color: white; }
+        .tx-details p { margin: 0; font-size: 0.85rem; color: #888; }
+        .tx-amount { font-weight: bold; font-size: 1.1rem; color: #2ECC71; }
+        .transaction-item.debited .tx-amount { color: #e74c3c; }
+
+        footer { background: #0A1F13; padding: 25px; text-align: center; color: #555; font-size: 0.85rem; border-top: 1px solid #1a2e22; }
+
+        /* 📱 MEDIA QUERIES DISPOSITION DU PANNEAU */
+        @media (max-width: 768px) {
+            .dashboard-container { grid-template-columns: 1fr !important; gap: 20px !important; margin: 15px auto !important; }
+            .sidebar-user { width: 100% !important; }
+            .wallet-card { flex-direction: column !important; text-align: center !important; }
+            .transaction-item { flex-direction: column !important; align-items: flex-start !important; gap: 10px !important; }
+            .tx-amount { text-align: left !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-site">My Job Pro</a>
+        <div class="nav-right">
+            <a href="profil-candidat.html" style="color: #2ECC71; font-weight: bold; text-decoration: none; margin-right: 20px; font-size: 0.9rem;">Modifier mon CV</a>
+            <a href="javascript:void(0)" onclick="handleLogout()" class="btn-logout">DÉCONNEXION</a>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <aside class="sidebar-user">
+            <div style="width: 80px; height: 80px; background: #2b2b2b; border-radius: 50%; margin: 0 auto 15px auto; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; border: 2px solid #2ECC71;">👤</div>
+            <h3 style="margin: 0 0 5px 0; font-size: 1.2rem;" id="user-profile-name">Candidat</h3>
+            <p style="margin: 0 0 20px 0; color: #888; font-size: 0.8rem;">Portefeuille Numérique</p>
+            <ul style="text-align: left; padding: 0; list-style: none; font-size: 0.9rem;">
+                <li style="margin-bottom: 12px;"><a href="#" style="color: #2ECC71; font-weight: bold; text-decoration: none;">📋 Tableau de bord</a></li>
+                <li><a href="messagerie.html" style="color: #bbb; text-decoration: none;">✉️ Discussion Privée</a></li>
+            </ul>
+        </aside>
+
+        <main class="dashboard-main">
+            <div class="wallet-card">
+                <div class="wallet-balance">
+                    <h5>Solde de mon compte</h5>
+                    <h2><span id="account-balance">35 000</span> FCFA</h2>
+                </div>
+                <button class="btn-signup" onclick="rechargeWallet()">⚡ Recharger par Mobile Money</button>
+            </div>
+
+            <div class="section-card">
+                <h2>Paiement direct sur le terrain (Plombier, Taxi, Artisan)</h2>
+                <p style="color:#b0b0b0; font-size:0.9rem; margin-bottom:20px;">Scannez le Code QR de l'artisan après l'exécution physique. Le prélèvement unique de 10% s'applique directement.</p>
+                
+                <div class="qr-scanner-box">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="#a0a0a0"><path d="M4 4h6v6H4V4zm2 2v2h2V6H6zm0 12h2v2H6v-2zM4 14h6v6H4v-6zm14-10h6v6h-6V4zm2 2v2h2V6h-2zm-6 8h2v2h-2v-2zm2 2h2v2h-2v-2zm2 2h2v2h-2v-2z"/></svg>
+                    <div style="color:#888; font-size:0.85rem; margin-top: 10px;">Analyse optique active...</div>
+                </div>
+                <button class="btn-signup" style="background:#2ECC71; width:100%; border:none; color: black;" onclick="simulateQRScanWithFees()">📷 Simuler le paiement d'un Plombier</button>
+            </div>
+
+            <div class="section-card">
+                <h2>Historique de mes transactions</h2>
+                <div class="transaction-list" id="tx-wrapper">
+                    <div class="transaction-item">
+                        <div class="tx-details">
+                            <h4>Dépôt de Garantie Séquestre — Rénovation</h4>
+                            <p>Émetteur : <strong>Entreprise Tech Innov</strong> | Réf : #TX-9844</p>
+                        </div>
+                        <div class="tx-amount">+25 000 FCFA</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        &copy; 2026 My Job Pro. Systèmes financiers cryptés conformes ARTCI.
+    </footer>
+
+    <script>
+        let currentBalance = 35000;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedName = localStorage.getItem('user_fullname');
+            if (savedName) document.getElementById('user-profile-name').textContent = savedName;
+            
+            const savedBalance = localStorage.getItem('user_balance');
+            if (savedBalance) {
+                currentBalance = parseInt(savedBalance, 10);
+            }
+            updateBalanceDisplay();
+        });
+
+        function updateBalanceDisplay() { 
+            document.getElementById('account-balance').textContent = currentBalance.toLocaleString('fr-FR'); 
+            localStorage.setItem('user_balance', currentBalance);
+        }
+
+        function rechargeWallet() {
+            const amount = prompt("Montant à recharger (FCFA) :");
+            const parsed = parseInt(amount, 10);
+            if (!isNaN(parsed) && parsed > 0) {
+                currentBalance += parsed;
+                updateBalanceDisplay();
+                
+                // Ajout dans l'historique
+                addTransactionItem("Recharge Mobile Money", "Dépôt instantané", parsed, false);
+            } else if (amount !== null) {
+                alert("Veuillez saisir un montant numérique valide.");
+            }
+        }
+
+        function simulateQRScanWithFees() {
+            const servicePrice = prompt("Entrez le montant brut de la prestation (FCFA) :", "15000");
+            const price = parseInt(servicePrice, 10);
+            
+            if (!isNaN(price) && price > 0) {
+                // Application de la commission marketplace de 10%
+                const fee = Math.round(price * 0.10);
+                const totalDebit = price + fee;
+                
+                if (currentBalance >= totalDebit) {
+                    currentBalance -= totalDebit;
+                    updateBalanceDisplay();
+                    
+                    // Ajout des éléments de débit à l'historique
+                    addTransactionItem("Règlement Plombier (QR)", `Prestation physique - Commission marketplace incluse (${fee.toLocaleString('fr-FR')} FCFA)`, totalDebit, true);
+                    alert(`Paiement effectué avec succès ! Prestation : ${price} FCFA + Commission (10%) : ${fee} FCFA.`);
+                } else {
+                    alert("Solde insuffisant pour couvrir la prestation et la commission de 10%. Veuillez recharger votre portefeuille.");
+                }
+            } else if (servicePrice !== null) {
+                alert("Veuillez saisir un prix valide.");
+            }
+        }
+
+        function addTransactionItem(title, subtitle, amount, isDebit) {
+            const wrapper = document.getElementById('tx-wrapper');
+            const item = document.createElement('div');
+            item.className = isDebit ? "transaction-item debited" : "transaction-item";
+            
+            item.innerHTML = `
+                <div class="tx-details">
+                    <h4>\${title}</h4>
+                    <p>\${subtitle} | Réf : #TX-\${Math.floor(1000 + Math.random() * 9000)}</p>
+                </div>
+                <div class="tx-amount">\${isDebit ? '-' : '+'}\${amount.toLocaleString('fr-FR')} FCFA</div>
+            `;
+            wrapper.insertBefore(item, wrapper.firstChild);
+        }
+
+        function handleLogout() {
+            if(confirm('Êtes-vous sûr de vouloir vous déconnecter ?')) {
+                localStorage.removeItem('user_role');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>

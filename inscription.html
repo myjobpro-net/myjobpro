@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Job Pro - Inscription Cloud & Vérification KYC</title>
+    
+    <style>
+        body { background: #121212; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; }
+        *, *:before, *:after { box-sizing: inherit; }
+        header { background: #0A1F13; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; border-bottom: 1px solid #1a2e22; box-shadow: 0 4px 15px rgba(0,0,0,0.6); }
+        .logo-site { color: #FF8C00; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; text-decoration: none; }
+        .nav-right a { color: #2ECC71; text-decoration: none; font-weight: bold; font-size: 0.9rem; }
+        .box { max-width: 600px; width: 100%; margin: 40px auto; padding: 40px; background: #1e1e1e; border-radius: 12px; border: 1px solid #333; border-top: 5px solid #FF8C00; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        h1 { font-size: 1.6rem; font-weight: 600; text-align: center; margin-bottom: 5px; color: #ffffff; margin-top: 0; }
+        .step-indicator { text-align: center; color: #888; font-size: 14px; margin-bottom: 25px; }
+        label { display: block; margin-top: 15px; margin-bottom: 8px; font-size: 0.85rem; color: #b0b0b0; font-weight: 600; }
+        input[type="text"], input[type="email"], input[type="password"], input[type="number"], select { width: 100%; padding: 12px; border: 1px solid #333; border-radius: 6px; background: #2b2b2b; color: #f0f0f0; outline: none; font-size: 0.9rem; box-sizing: border-box; transition: border-color 0.3s; }
+        input:focus, select:focus { border-color: #FF8C00; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .btn-submit { width: 100%; background-color: #FF8C00; color: white; border: none; padding: 14px; font-size: 0.9rem; font-weight: bold; border-radius: 6px; cursor: pointer; text-transform: uppercase; margin-top: 25px; }
+        .btn-submit:hover { background-color: #e67e00; }
+        .btn-submit:disabled { background-color: #444; color: #888; cursor: not-allowed; }
+        .profile-btn { background:#2b2b2b; color:white; padding:18px; border:1px solid #444; border-radius:8px; font-weight:bold; cursor:pointer; text-align: left; font-size: 0.95rem; display: flex; align-items: center; gap: 15px; transition: 0.3s; width: 100%; }
+        .profile-btn:hover { border-color: #FF8C00; background: #222; }
+        .kyc-box { background: rgba(255, 140, 0, 0.03); border: 1px dashed #FF8C00; padding: 20px; border-radius: 8px; margin-top: 15px; }
+        .file-input-label { background: #0A1F13; border: 1px solid #2ECC71; color: #2ECC71; padding: 10px; display: inline-block; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: bold; text-align: center; width: 100%; box-sizing: border-box; margin-top: 5px; }
+        input[type="file"] { display: none; }
+        .error-banner { display: none; background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; color: #e74c3c; padding: 12px; border-radius: 6px; font-size: 0.85rem; text-align: center; margin-bottom: 15px; }
+        footer { background: #0A1F13; padding: 25px; text-align: center; color: #555; font-size: 0.85rem; border-top: 1px solid #1a2e22; margin-top: auto; }
+    </style>
+
+    <script>
+        // INFRASTRUCTURE RÉSEAU CLOUD SUPABASE
+        const CONFIG_SUPABASE_URL = "https://supabase.co"; 
+        const CONFIG_SUPABASE_KEY = "VOTRE_CLE_ANON_PUBLIC_ICI";              
+
+        let selectedRole = '';
+        let kycDataStrings = { rectoString: "Fichier non requis", versoString: "Fichier non requis", selfieString: "Fichier non requis" };
+        let compressionsEnCours = 0;
+
+        function selectProfile(role) {
+            selectedRole = role;
+            document.getElementById('step-1').style.display = 'none';
+            document.getElementById('step-2').style.display = 'block';
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((p) => {
+                    document.getElementById('geo-lat').value = p.coords.latitude.toFixed(4);
+                    document.getElementById('geo-lon').value = p.coords.longitude.toFixed(4);
+                });
+            }
+        }
+
+        function updateCountryPhoneCode() {
+            const selector = document.getElementById('countrySelect');
+            const option = selector.options[selector.selectedIndex];
+            document.getElementById('phoneCode').value = option.getAttribute('data-code');
+        }
+
+        function goToStep3() {
+            const errorBox = document.getElementById('error-box');
+            errorBox.style.display = "none";
+
+            const pass = document.getElementById('password').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
+
+            if (pass !== confirmPass) {
+                errorBox.style.display = "block";
+                errorBox.textContent = "❌ Les deux mots de passe ne correspondent pas. Veuillez vérifier.";
+                window.scrollTo(0,0);
+                return;
+            }
+
+            document.getElementById('step-2').style.display = 'none';
+            document.getElementById('step-3').style.display = 'block';
+
+            document.getElementById('artisan-fields').style.display = (selectedRole === 'independant') ? 'block' : 'none';
+            document.getElementById('recruiter-fields').style.display = (selectedRole === 'recruteur') ? 'block' : 'none';
+
+            const blocKYC = document.getElementById('kyc-verification-panel');
+            if (selectedRole === 'independant' || selectedRole === 'client') {
+                blocKYC.style.display = 'block';
+                ajusterLabelsKYC();
+            } else {
+                blocKYC.style.display = 'none';
+            }
+        }
+
+        function ajusterLabelsKYC() {
+            const type = document.getElementById('idType').value;
+            document.getElementById('lbl-id-number').textContent = type === "CNI" ? "Numéro de la Carte Nationale d'Identité" : "Numéro du document";
+            document.getElementById('div-file-verso').style.display = type === "PASSEPORT" ? "none" : "block";
+            if(type === "PASSEPORT") kycDataStrings.versoString = "Non requis pour Passeport";
+        }
+
+        function compresserEtConvertirPhoto(input, variableCible) {
+            if (input.files && input.files[0]) {
+                compressionsEnCours++;
+                document.getElementById('final-btn').disabled = true;
+
+                const lecteur = new FileReader();
+                lecteur.onload = function(e) {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const MAX_WIDTH = 700;
+                        let width = img.width; let height = img.height;
+                        
+                        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
+                        canvas.width = width; canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        
+                        kycDataStrings[variableCible] = canvas.toDataURL('image/jpeg', 0.5);
+                        
+                        const labelId = input.id === "fileRecto" ? "btn-recto" : (input.id === "fileVerso" ? "btn-verso" : "btn-selfie");
+                        const elBtn = document.getElementById(labelId);
+                        elBtn.textContent = "✅ Photo mémorisée";
+                        elBtn.style.background = "#2ECC71"; elBtn.style.color = "black";
+
+                        compressionsEnCours--;
+                        if(compressionsEnCours === 0) document.getElementById('final-btn').disabled = false;
+                    };
+                };
+                lecteur.readAsDataURL(input.files[0]);
+            }
+        }
+
+        async function handleRegistrationSubmit() {
+            const errorBox = document.getElementById('error-box');
+            const finalBtn = document.getElementById('final-btn');
+            errorBox.style.display = "none";
+
+            if (compressionsEnCours > 0) {
+                errorBox.style.display = "block";
+                errorBox.textContent = "⏳ Cryptage de vos documents en cours... Attendez 3 secondes.";
+                return;
+            }
+
+            const fullname = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const country = document.getElementById('countrySelect').value;
+            const city = document.getElementById('city').value.trim();
+            const phoneComplete = document.getElementById('phoneCode').value + document.getElementById('phoneNum').value.trim();
+            const userPass = document.getElementById('password').value;
+            
+            const lat = parseFloat(document.getElementById('geo-lat').value);
+            const lon = parseFloat(document.getElementById('geo-lon').value);
+
+            let activity = "Particulier";
+            if (selectedRole === 'independant') activity = document.getElementById('artisan-activity').value;
+            else if (selectedRole === 'recruteur') activity = document.getElementById('company-name').value;
+            else if (selectedRole === 'candidat') activity = "Salariat";
+
+            const idDocNumber = document.getElementById('idNumber') ? document.getElementById('idNumber').value.trim() : "Non requis";
+
