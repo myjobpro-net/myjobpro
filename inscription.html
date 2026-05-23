@@ -41,7 +41,6 @@
                 <label>Pays</label>
                 <select id="countrySelect" onchange="majIndicatif()" required>
                     <option value="">Sélectionnez votre pays...</option>
-                    <!-- Cette liste se remplit automatiquement via JavaScript de A à Z sans bug -->
                 </select>
 
                 <label>Ville</label>
@@ -69,7 +68,6 @@
 
         let roleChoisi = '';
 
-        // Base de données sécurisée pour éviter tout plantage de caractères spéciaux
         const rawCountries = [
             {"code":"CI","dial":"+225","name":"Côte d'Ivoire","flag":"🇨🇮"},
             {"code":"SN","dial":"+221","name":"Sénégal","flag":"🇸🇳"},
@@ -101,7 +99,7 @@
             {"code":"GB","dial":"+44","name":"Royaume-Uni","flag":"🇬🇧"}
         ];
 
-        // Génère automatiquement et proprement la liste triée de A à Z au démarrage
+        // Remplit la liste déroulante proprement au démarrage
         window.addEventListener("DOMContentLoaded", () => {
             const select = document.getElementById("countrySelect");
             const sorted = rawCountries.sort((a, b) => a.name.localeCompare(b.name));
@@ -115,14 +113,14 @@
             });
         });
 
-        // Activation immédiate de l'étape 2 (0 délai)
+        // Gestion du clic pour passer à l'étape 2
         function selectProfile(role) {
             roleChoisi = role;
             document.getElementById('step-1').style.display = 'none';
             document.getElementById('step-2').style.display = 'block';
         }
 
-        // Met automatiquement l'indicatif dans la case téléphone
+        // Met automatiquement l'indicatif téléphonique à jour
         function majIndicatif() {
             const select = document.getElementById("countrySelect");
             const optionSelectionnee = select.options[select.selectedIndex];
@@ -137,7 +135,7 @@
             }
         }
 
-        // Envoi sécurisé des données à Supabase
+        // Envoi final des données à Supabase Auth
         async function finaliserInscriptionDirecte() {
             const name = document.getElementById('fullname').value.trim();
             const email = document.getElementById('email').value.trim().toLowerCase();
@@ -190,3 +188,8 @@
                         return;
                     }
                     alert("✓ Inscription réussie !");
+                    window.location.href = "connexion.html";
+                } else {
+                    alert("Erreur Supabase : " + (data.msg || data.error_description || "Une erreur est survenue."));
+                }
+            } catch (err) {
