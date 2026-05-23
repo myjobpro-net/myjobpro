@@ -6,22 +6,19 @@
     <title>My Job Pro - Inscription</title>
     <style>
         body { background: #121212; color: #e0e0e0; font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
-        .box { max-width: 500px; margin: 40px auto; padding: 30px; background: #1e1e1e; border-radius: 8px; border: 1px solid #333; position: relative; }
+        .box { max-width: 500px; margin: 40px auto; padding: 30px; background: #1e1e1e; border-radius: 8px; border: 1px solid #333; }
         h1 { color: #FF8C00; font-size: 1.5rem; margin-bottom: 20px; }
-        .profile-btn { width: 100%; background: #2b2b2b; color: white; padding: 15px; margin: 10px 0; border: 1px solid #444; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: left; display: block; position: relative; z-index: 10; }
+        .profile-btn { width: 100%; background: #2b2b2b; color: white; padding: 15px; margin: 10px 0; border: 1px solid #444; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: left; display: block; }
         .profile-btn:hover { border-color: #FF8C00; background: #333; }
         label { display: block; text-align: left; margin-top: 15px; font-size: 0.85rem; color: #b0b0b0; }
         input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 6px; border: 1px solid #333; background: #2b2b2b; color: white; box-sizing: border-box; font-size: 1rem; }
         .btn-submit { width: 100%; background: #FF8C00; color: white; padding: 14px; border: none; border-radius: 6px; font-weight: bold; margin-top: 20px; cursor: pointer; text-transform: uppercase; }
-        
-        /* Gestion propre des affichages pour éviter les superpositions invisibles */
-        #step-1, #step-2 { width: 100%; height: auto; }
     </style>
 </head>
 <body>
 
     <div class="box">
-        <!-- ÉTAPE 1 : Choix du profil (Boutons totalement cliquables) -->
+        <!-- ÉTAPE 1 : Choix du profil -->
         <div id="step-1">
             <h1>Créer votre espace de travail</h1>
             <button type="button" class="profile-btn" onclick="selectProfile('independant')">👷‍♂️ Travailleur Indépendant / Freelance</button>
@@ -133,3 +130,6 @@
                     <option value="IR" data-code="+98">Iran 🇮🇷</option>
                     <option value="IE" data-code="+353">Irlande 🇮🇪</option>
                     <option value="IS" data-code="+354">Islande 🇮🇸</option>
+                    <option value="IL" data-code="+972">Israël 🇮🇱</option>
+                    <option value="IT" data-code="+39">Italie 🇮🇹</option>
+                    <option value="JM" data-code="+1">Jamaïque 🇯🇲</option>
