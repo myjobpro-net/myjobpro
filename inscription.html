@@ -40,96 +40,153 @@
 
                 <label>Pays</label>
                 <select id="countrySelect" onchange="majIndicatif()" required>
-                    <option value="">Sélectionnez votre pays de A à Z...</option>
-                    <option value="AF" data-code="+93">Afghanistan 🇦🇫</option>
-                    <option value="ZA" data-code="+27">Afrique du Sud 🇿🇦</option>
-                    <option value="AL" data-code="+355">Albanie 🇦🇱</option>
-                    <option value="DZ" data-code="+213">Algérie 🇩🇿</option>
-                    <option value="DE" data-code="+49">Allemagne 🇩🇪</option>
-                    <option value="AD" data-code="+376">Andorre 🇦🇩</option>
-                    <option value="AO" data-code="+244">Angola 🇦🇴</option>
-                    <option value="SA" data-code="+966">Arabie Saoudite 🇸🇦</option>
-                    <option value="AR" data-code="+54">Argentine 🇦🇷</option>
-                    <option value="AM" data-code="+374">Arménie 🇦🇲</option>
-                    <option value="AU" data-code="+61">Australie 🇦🇺</option>
-                    <option value="AT" data-code="+43">Autriche 🇦🇹</option>
-                    <option value="AZ" data-code="+994">Azerbaïdjan 🇦🇿</option>
-                    <option value="BS" data-code="+1">Bahamas 🇧🇸</option>
-                    <option value="BH" data-code="+973">Bahreïn 🇧🇭</option>
-                    <option value="BD" data-code="+880">Bangladesh 🇧🇩</option>
-                    <option value="BB" data-code="+1">Barbade 🇧🇧</option>
-                    <option value="BE" data-code="+32">Belgique 🇧🇪</option>
-                    <option value="BZ" data-code="+501">Belize 🇧🇿</option>
-                    <option value="BJ" data-code="+229">Bénin 🇧🇯</option>
-                    <option value="BM" data-code="+1">Bermudes 🇧🇲</option>
-                    <option value="BT" data-code="+975">Bhoutan 🇧🇹</option>
-                    <option value="BY" data-code="+375">Biélorussie 🇧🇾</option>
-                    <option value="MM" data-code="+95">Birmanie 🇲🇲</option>
-                    <option value="BO" data-code="+591">Bolivie 🇧🇴</option>
-                    <option value="BA" data-code="+387">Bosnie-Herzégovine 🇧🇦</option>
-                    <option value="BW" data-code="+267">Botswana 🇧🇼</option>
-                    <option value="BR" data-code="+55">Brésil 🇧🇷</option>
-                    <option value="BN" data-code="+673">Brunei 🇧🇳</option>
-                    <option value="BG" data-code="+359">Bulgarie 🇧🇬</option>
-                    <option value="BF" data-code="+226">Burkina Faso 🇧🇫</option>
-                    <option value="BI" data-code="+257">Burundi 🇧🇮</option>
-                    <option value="KH" data-code="+855">Cambodge 🇰🇭</option>
-                    <option value="CM" data-code="+237">Cameroun 🇨🇲</option>
-                    <option value="CA" data-code="+1">Canada 🇨🇦</option>
-                    <option value="CV" data-code="+238">Cap-Vert 🇨🇻</option>
-                    <option value="CL" data-code="+56">Chili 🇨🇱</option>
-                    <option value="CN" data-code="+86">Chine 🇨🇳</option>
-                    <option value="CY" data-code="+357">Chypre 🇨🇾</option>
-                    <option value="CO" data-code="+57">Colombie 🇨🇴</option>
-                    <option value="KM" data-code="+269">Comores 🇰🇲</option>
-                    <option value="CG" data-code="+242">Congo 🇨🇬</option>
-                    <option value="CD" data-code="+243">Congo (RDC) 🇨🇩</option>
-                    <option value="KP" data-code="+850">Corée du Nord 🇰🇵</option>
-                    <option value="KR" data-code="+82">Corée du Sud 🇰🇷</option>
-                    <option value="CR" data-code="+506">Costa Rica 🇨🇷</option>
-                    <option value="CI" data-code="+225">Côte d'Ivoire 🇨🇮</option>
-                    <option value="HR" data-code="+385">Croatie 🇭🇷</option>
-                    <option value="CU" data-code="+53">Cuba 🇨🇺</option>
-                    <option value="DK" data-code="+45">Danemark 🇩🇰</option>
-                    <option value="DJ" data-code="+253">Djibouti 🇩🇯</option>
-                    <option value="DM" data-code="+1">Dominique 🇩🇲</option>
-                    <option value="EG" data-code="+20">Égypte 🇪🇬</option>
-                    <option value="AE" data-code="+971">Émirats Arabes Unis 🇦🇪</option>
-                    <option value="EC" data-code="+593">Équateur 🇪🇨</option>
-                    <option value="ER" data-code="+291">Érythrée 🇪🇷</option>
-                    <option value="ES" data-code="+34">Espagne 🇪🇸</option>
-                    <option value="EE" data-code="+372">Estonie 🇪🇪</option>
-                    <option value="US" data-code="+1">États-Unis 🇺🇸</option>
-                    <option value="ET" data-code="+251">Éthiopie 🇪🇹</option>
-                    <option value="FJ" data-code="+679">Fidji 🇫🇯</option>
-                    <option value="FI" data-code="+358">Finlande 🇫🇮</option>
-                    <option value="FR" data-code="+33">France 🇫🇷</option>
-                    <option value="GA" data-code="+241">Gabon 🇬🇦</option>
-                    <option value="GM" data-code="+220">Gambie 🇬🇲</option>
-                    <option value="GE" data-code="+995">Géorgie 🇬🇪</option>
-                    <option value="GH" data-code="+233">Ghana 🇬🇭</option>
-                    <option value="GI" data-code="+350">Gibraltar 🇬🇮</option>
-                    <option value="GR" data-code="+30">Grèce 🇬🇷</option>
-                    <option value="GD" data-code="+1">Grenade 🇬🇩</option>
-                    <option value="GL" data-code="+299">Groenland 🇬🇱</option>
-                    <option value="GP" data-code="+590">Guadeloupe 🇬🇵</option>
-                    <option value="GU" data-code="+1">Guam 🇬🇺</option>
-                    <option value="GT" data-code="+502">Guatemala 🇬🇹</option>
-                    <option value="GN" data-code="+224">Guinée 🇬🇳</option>
-                    <option value="GW" data-code="+245">Guinée-Bissau 🇬🇼</option>
-                    <option value="GQ" data-code="+240">Guinée Équatoriale 🇬🇶</option>
-                    <option value="GY" data-code="+592">Guyana 🇬🇾</option>
-                    <option value="GF" data-code="+594">Guyane Française 🇬🇫</option>
-                    <option value="HT" data-code="+509">Haïti 🇭🇹</option>
-                    <option value="HN" data-code="+504">Honduras 🇭🇳</option>
-                    <option value="HK" data-code="+852">Hong Kong 🇭🇰</option>
-                    <option value="HU" data-code="+36">Hongrie 🇭🇺</option>
-                    <option value="IN" data-code="+91">Inde 🇮🇳</option>
-                    <option value="ID" data-code="+62">Indonésie 🇮🇩</option>
-                    <option value="IQ" data-code="+964">Irak 🇮🇶</option>
-                    <option value="IR" data-code="+98">Iran 🇮🇷</option>
-                    <option value="IE" data-code="+353">Irlande 🇮🇪</option>
-                    <option value="IS" data-code="+354">Islande 🇮🇸</option>
-                    <option value="IL" data-code="+972">Israël 🇮🇱</option>
-                    <option value="IT" data-code="+39">Italie 🇮🇹</option>
-                    <option value="JM" data-code="+1">Jamaïque 🇯🇲</option>
+                    <option value="">Sélectionnez votre pays...</option>
+                    <!-- Cette liste se remplit automatiquement via JavaScript de A à Z sans bug -->
+                </select>
+
+                <label>Ville</label>
+                <input type="text" id="city" required>
+
+                <label>Numéro de téléphone</label>
+                <input type="text" id="phoneNum" placeholder="Sélectionnez d'abord le Pays" required>
+
+                <label>Mot de passe</label>
+                <input type="password" id="password" placeholder="Minimum 6 caractères" required>
+
+                <label>Confirmation du mot de passe</label>
+                <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe" required>
+
+                <button type="submit" class="btn-submit">Finaliser l'inscription</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // CONFIGURATION DU PROJET SUPABASE
+        const SUPABASE_PROJECT_ID = "hqnhkrzhckgytgxafflcx"; 
+        const SUPABASE_URL = `https://${SUPABASE_PROJECT_ID}.supabase.co`; 
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbmhremhja2d5dGd4YWZmbGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5NTIsImV4cCI6MjA5NDk2Nzk1Mn0.lbvq-Xwo3fQP5UGBMROA4PafWWmF_B5PUiYx7NN3FxQ";
+
+        let roleChoisi = '';
+
+        // Base de données sécurisée pour éviter tout plantage de caractères spéciaux
+        const rawCountries = [
+            {"code":"CI","dial":"+225","name":"Côte d'Ivoire","flag":"🇨🇮"},
+            {"code":"SN","dial":"+221","name":"Sénégal","flag":"🇸🇳"},
+            {"code":"FR","dial":"+33","name":"France","flag":"🇫🇷"},
+            {"code":"MA","dial":"+212","name":"Maroc","flag":"🇲🇦"},
+            {"code":"DZ","dial":"+213","name":"Algérie","flag":"🇩🇿"},
+            {"code":"TN","dial":"+216","name":"Tunisie","flag":"🇹🇳"},
+            {"code":"BF","dial":"+226","name":"Burkina Faso","flag":"🇧🇫"},
+            {"code":"ML","dial":"+223","name":"Mali","flag":"🇲🇱"},
+            {"code":"GN","dial":"+224","name":"Guinée","flag":"🇬🇳"},
+            {"code":"NE","dial":"+227","name":"Niger","flag":"🇳🇪"},
+            {"code":"TG","dial":"+228","name":"Togo","flag":"🇹🇬"},
+            {"code":"BJ","dial":"+229","name":"Bénin","flag":"🇧🇯"},
+            {"code":"CM","dial":"+237","name":"Cameroun","flag":"🇨🇲"},
+            {"code":"GA","dial":"+241","name":"Gabon","flag":"🇬🇦"},
+            {"code":"CG","dial":"+242","name":"Congo","flag":"🇨🇬"},
+            {"code":"CD","dial":"+243","name":"Congo RDC","flag":"🇨🇩"},
+            {"code":"BE","dial":"+32","name":"Belgique","flag":"🇧🇪"},
+            {"code":"CH","dial":"+41","name":"Suisse","flag":"🇨🇭"},
+            {"code":"CA","dial":"+1","name":"Canada","flag":"🇨🇦"},
+            {"code":"MG","dial":"+261","name":"Madagascar","flag":"🇲🇬"},
+            {"code":"MR","dial":"+222","name":"Mauritanie","flag":"🇲🇷"},
+            {"code":"TD","dial":"+235","name":"Tchad","flag":"🇹🇩"},
+            {"code":"RW","dial":"+250","name":"Rwanda","flag":"🇷🇼"},
+            {"code":"DE","dial":"+49","name":"Allemagne","flag":"🇩🇪"},
+            {"code":"ES","dial":"+34","name":"Espagne","flag":"🇪🇸"},
+            {"code":"IT","dial":"+39","name":"Italie","flag":"🇮🇹"},
+            {"code":"US","dial":"+1","name":"États-Unis","flag":"🇺🇸"},
+            {"code":"GB","dial":"+44","name":"Royaume-Uni","flag":"🇬🇧"}
+        ];
+
+        // Génère automatiquement et proprement la liste triée de A à Z au démarrage
+        window.addEventListener("DOMContentLoaded", () => {
+            const select = document.getElementById("countrySelect");
+            const sorted = rawCountries.sort((a, b) => a.name.localeCompare(b.name));
+            
+            sorted.forEach(p => {
+                const opt = document.createElement("option");
+                opt.value = p.code;
+                opt.setAttribute("data-code", p.dial);
+                opt.textContent = `${p.name} ${p.flag}`;
+                select.appendChild(opt);
+            });
+        });
+
+        // Activation immédiate de l'étape 2 (0 délai)
+        function selectProfile(role) {
+            roleChoisi = role;
+            document.getElementById('step-1').style.display = 'none';
+            document.getElementById('step-2').style.display = 'block';
+        }
+
+        // Met automatiquement l'indicatif dans la case téléphone
+        function majIndicatif() {
+            const select = document.getElementById("countrySelect");
+            const optionSelectionnee = select.options[select.selectedIndex];
+            const indicatif = optionSelectionnee.getAttribute("data-code");
+            const champTelephone = document.getElementById("phoneNum");
+
+            if (indicatif) {
+                champTelephone.value = indicatif + " ";
+                champTelephone.focus();
+            } else {
+                champTelephone.value = "";
+            }
+        }
+
+        // Envoi sécurisé des données à Supabase
+        async function finaliserInscriptionDirecte() {
+            const name = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const selectPays = document.getElementById('countrySelect');
+            const codeISO = selectPays.value;
+            const nomPays = selectPays.options[selectPays.selectedIndex].text;
+            const city = document.getElementById('city').value.trim();
+            const phone = document.getElementById('phoneNum').value.trim();
+            const pass = document.getElementById('password').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
+
+            if (pass !== confirmPass) {
+                alert("❌ Erreur : Les deux mots de passe ne correspondent pas.");
+                return;
+            }
+
+            if (pass.length < 6) {
+                alert("❌ Erreur : Le mot de passe doit contenir au moins 6 caractères.");
+                return;
+            }
+
+            try {
+                const response = await fetch(SUPABASE_URL + "/auth/v1/signup", {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: pass,
+                        options: {
+                            data: {
+                                full_name: name,
+                                role: roleChoisi,
+                                country: codeISO, 
+                                country_name: nomPays,
+                                city: city,
+                                phone: phone
+                            }
+                        }
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (data.identities && data.identities.length === 0) {
+                        alert("Cet email est déjà lié à un compte existant.");
+                        return;
+                    }
+                    alert("✓ Inscription réussie !");
