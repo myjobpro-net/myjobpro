@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Job Pro - Inscription</title>
+    <style>
+        body { background: #121212; color: #e0e0e0; font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
+        .box { max-width: 500px; margin: 40px auto; padding: 30px; background: #1e1e1e; border-radius: 8px; border: 1px solid #333; }
+        h1 { color: #FF8C00; font-size: 1.5rem; margin-bottom: 20px; }
+        label { display: block; text-align: left; margin-top: 15px; font-size: 0.85rem; color: #b0b0b0; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 6px; border: 1px solid #333; background: #2b2b2b; color: white; box-sizing: border-box; font-size: 1rem; }
+        .btn-submit { width: 100%; background: #FF8C00; color: white; padding: 14px; border: none; border-radius: 6px; font-weight: bold; margin-top: 25px; cursor: pointer; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h1>Créer votre espace de travail</h1>
+        
+        <form id="formInscriptionUnique">
+            
+            <label>Votre profil</label>
+            <select id="roleChoisi" required>
+                <option value="">Choisissez un profil...</option>
+                <option value="independant">👷‍♂️ Travailleur Indépendant / Freelance</option>
+                <option value="client">👤 Client Particulier</option>
+                <option value="candidat">📄 Candidat à l'Emploi</option>
+                <option value="recruteur">🏢 Recruteur / Entreprise</option>
+            </select>
+
+            <label>Nom et Prénom</label>
+            <input type="text" id="fullname" required>
+            
+            <label>Adresse e-mail</label>
+            <input type="email" id="email" required>
+
+            <label>Pays</label>
+            <select id="countrySelect" required>
+                <option value="">Sélectionnez votre pays de A à Z...</option>
+                <option value="CI" data-code="+225">Côte d'Ivoire 🇨🇮</option>
+                <option value="SN" data-code="+221">Sénégal 🇸🇳</option>
+                <option value="FR" data-code="+33">France 🇫🇷</option>
+                <option value="MA" data-code="+212">Maroc 🇲🇦</option>
+                <option value="DZ" data-code="+213">Algérie 🇩🇿</option>
+                <option value="TN" data-code="+216">Tunisie 🇹🇳</option>
+                <option value="BF" data-code="+226">Burkina Faso 🇧🇫</option>
+                <option value="ML" data-code="+223">Mali 🇲🇱</option>
+                <option value="GN" data-code="+224">Guinée 🇬🇳</option>
+                <option value="NE" data-code="+227">Niger 🇳🇪</option>
+                <option value="TG" data-code="+228">Togo 🇹🇬</option>
+                <option value="BJ" data-code="+229">Bénin 🇧🇯</option>
+                <option value="CM" data-code="+237">Cameroun 🇨🇲</option>
+                <option value="GA" data-code="+241">Gabon 🇬🇦</option>
+                <option value="CG" data-code="+242">Congo 🇨🇬</option>
+                <option value="CD" data-code="+243">Congo (RDC) 🇨🇩</option>
+                <option value="BE" data-code="+32">Belgique 🇧🇪</option>
+                <option value="CH" data-code="+41">Suisse 🇨🇭</option>
+                <option value="CA" data-code="+1">Canada 🇨🇦</option>
+                <option value="MG" data-code="+261">Madagascar 🇲🇬</option>
+                <option value="MR" data-code="+222">Mauritanie 🇲🇷</option>
+                <option value="TD" data-code="+235">Tchad 🇹🇩</option>
+                <option value="RW" data-code="+250">Rwanda 🇷🇼</option>
+                <option value="DE" data-code="+49">Allemagne 🇩🇪</option>
+                <option value="ES" data-code="+34">Espagne 🇪🇸</option>
+                <option value="IT" data-code="+39">Italie 🇮🇹</option>
+                <option value="US" data-code="+1">États-Unis 🇺🇸</option>
+                <option value="GB" data-code="+44">Royaume-Uni 🇬🇧</option>
+            </select>
+
+            <label>Ville</label>
+            <input type="text" id="city" required>
+
+            <label>Numéro de téléphone</label>
+            <input type="text" id="phoneNum" placeholder="Sélectionnez d'abord le Pays" required>
+
+            <label>Mot de passe</label>
+            <input type="password" id="password" placeholder="Minimum 6 caractères" required>
+
+            <label>Confirmation du mot de passe</label>
+            <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe" required>
+
+            <button type="submit" class="btn-submit">Finaliser l'inscription</button>
+        </form>
+    </div>
+
+    <script>
+        const SUPABASE_PROJECT_ID = "hqnhkrzhckgytgxafflcx"; 
+        const SUPABASE_URL = `https://${SUPABASE_PROJECT_ID}.supabase.co`; 
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbmhremhja2d5dGd4YWZmbGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5NTIsImV4cCI6MjA5NDk2Nzk1Mn0.lbvq-Xwo3fQP5UGBMROA4PafWWmF_B5PUiYx7NN3FxQ";
+
+        // Gestion de l'indicatif automatique natif (Sans onclick/onchange HTML)
+        document.getElementById("countrySelect").addEventListener("change", function() {
+            const option = this.options[this.selectedIndex];
+            const code = option.getAttribute("data-code");
+            const phone = document.getElementById("phoneNum");
+            if(code) {
+                phone.value = code + " ";
+                phone.focus();
+            } else {
+                phone.value = "";
+            }
+        });
+
+        // Validation et envoi à Supabase
+        document.getElementById("formInscriptionUnique").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            
+            const pass = document.getElementById('password').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
+
+            if (pass !== confirmPass) {
+                alert("❌ Erreur : Les deux mots de passe ne correspondent pas.");
+                return;
+            }
+
+            if (pass.length < 6) {
+                alert("❌ Erreur : Le mot de passe doit contenir au moins 6 caractères.");
+                return;
+            }
+
+            try {
+                const response = await fetch(SUPABASE_URL + "/auth/v1/signup", {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: document.getElementById('email').value.trim().toLowerCase(),
+                        password: pass,
+                        options: {
+                            data: {
+                                full_name: document.getElementById('fullname').value.trim(),
+                                role: document.getElementById('roleChoisi').value,
+                                country: document.getElementById('countrySelect').value, 
+                                country_name: document.getElementById('countrySelect').options[document.getElementById('countrySelect').selectedIndex].text,
+                                city: document.getElementById('city').value.trim(),
+                                phone: document.getElementById('phoneNum').value.trim()
+                            }
+                        }
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (data.identities && data.identities.length === 0) {
+                        alert("Cet email est déjà lié à un compte existant.");
+                        return;
+                    }
+                    alert("✓ Inscription réussie !");
+                    window.location.href = "connexion.html";
+                } else {
+                    alert("Erreur Supabase : " + (data.msg || data.error_description || "Une erreur est survenue."));
+                }
+            } catch (err) {
+                alert("Erreur réseau : Impossible de joindre Supabase.");
+            }
+        });
+    </script>
+</body>
+</html>
