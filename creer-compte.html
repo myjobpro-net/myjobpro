@@ -19,7 +19,6 @@
         <h1>Créer votre espace de travail</h1>
         
         <form id="formInscriptionUnique">
-            
             <label>Votre profil</label>
             <select id="roleChoisi" required>
                 <option value="">Choisissez un profil...</option>
@@ -37,8 +36,7 @@
 
             <label>Pays</label>
             <select id="countrySelect" required>
-                <option value="">Sélectionnez votre pays de A à Z...</option>
-                <!-- Rempli automatiquement de A à Z par JavaScript -->
+                <option value="">Chargement des pays...</option>
             </select>
 
             <label>Ville</label>
@@ -62,5 +60,99 @@
         const SUPABASE_URL = `https://${SUPABASE_PROJECT_ID}.supabase.co`; 
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbmhremhja2d5dGd4YWZmbGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5NTIsImV4cCI6MjA5NDk2Nzk1Mn0.lbvq-Xwo3fQP5UGBMROA4PafWWmF_B5PUiYx7NN3FxQ";
 
-        // Liste mondiale complète, propre et sans erreur de syntaxe
-        const allCountriesDatabase = [
+        // Chargement automatique et instantané de TOUS les pays via une API publique stable
+        window.addEventListener("DOMContentLoaded", async () => {
+            const select = document.getElementById("countrySelect");
+            try {
+                const res = await fetch("https://restcountries.com");
+                const countries = await res.json();
+                
+                // Traduction manuelle rapide des principaux pays francophones pour le confort visuel
+                const trad = { "Côte d'Ivoire": "Côte d'Ivoire", "Senegal": "Sénégal", "France": "France", "Morocco": "Maroc", "Algeria": "Algérie", "Tunisia": "Tunisie" };
+                
+                const list = countries.map(c => {
+                    const nameFr = trad[c.name.common] || c.name.common;
+                    const root = c.idd?.root || "";
+                    const suff = c.idd?.suffixes ? c.idd.suffixes[0] : "";
+                    return { name: nameFr, code: c.cca2, dial: root + suff, flag: c.flag || "" };
+                }).filter(c => c.dial).sort((a, b) => a.name.localeCompare(b.name));
+
+                select.innerHTML = '<option value="">Sélectionnez votre pays de A à Z...</option>';
+                list.forEach(p => {
+                    const opt = document.createElement("option");
+                    opt.value = p.code;
+                    opt.setAttribute("data-code", p.dial);
+                    opt.textContent = `${p.name} ${p.flag}`;
+                    select.appendChild(opt);
+                });
+            } catch (err) {
+                select.innerHTML = '<option value="">Erreur de chargement des pays</option>';
+            }
+        });
+
+        // Met automatiquement l'indicatif téléphonique à jour au choix du pays
+        document.getElementById("countrySelect").addEventListener("change", function() {
+            const option = this.options[this.selectedIndex];
+            const code = option.getAttribute("data-code");
+            const phone = document.getElementById("phoneNum");
+            if(code) {
+                phone.value = code + " ";
+                phone.focus();
+            } else {
+                phone.value = "";
+            }
+        });
+
+        // Validation et envoi sécurisé à Supabase
+        document.getElementById("formInscriptionUnique").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            const pass = document.getElementById('password').value;
+            const confirmPass = document.getElementById('confirmPassword').value;
+
+            if (pass !== confirmPass) {
+                alert("❌ Erreur : Les deux mots de passe ne correspondent pas.");
+                return;
+            }
+            if (pass.length < 6) {
+                alert("❌ Erreur : Le mot de passe doit contenir au moins 6 caractères.");
+                return;
+            }
+
+            try {
+                const response = await fetch(SUPABASE_URL + "/auth/v1/signup", {
+                    method: 'POST',
+                    headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: document.getElementById('email').value.trim().toLowerCase(),
+                        password: pass,
+                        options: {
+                            data: {
+                                full_name: document.getElementById('fullname').value.trim(),
+                                role: document.getElementById('roleChoisi').value,
+                                country: document.getElementById('countrySelect').value, 
+                                country_name: document.getElementById('countrySelect').options[document.getElementById('countrySelect').selectedIndex].text,
+                                city: document.getElementById('city').value.trim(),
+                                phone: document.getElementById('phoneNum').value.trim()
+                            }
+                        }
+                    })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    if (data.identities && data.identities.length === 0) {
+                        alert("Cet email est déjà lié à un compte existant.");
+                        return;
+                    }
+                    alert("✓ Inscription réussie !");
+                    window.location.href = "connexion.html";
+                } else {
+                    alert("Erreur Supabase : " + (data.msg || "Une erreur est survenue."));
+                }
+            } catch (err) {
+                alert("Erreur réseau : Impossible de joindre Supabase.");
+            }
+        });
+    </script>
+</body>
+</html>
