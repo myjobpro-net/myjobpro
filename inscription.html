@@ -29,27 +29,26 @@
         footer { background: #0A1F13; padding: 25px; text-align: center; color: #555; font-size: 0.85rem; border-top: 1px solid #1a2e22; margin-top: auto; }
     </style>
     
-    <!-- CHARGEMENT PRIORITAIRE DU CERVEAU INTÉLLIGENT NEURONAL (FACE-API) -->
-    <script src="https://cloudflare.com"></script>
+    <!-- FIX SOLUTION : Utilisation de la version script standard distribuable (Umd) qui n'utilise pas l'importation de modules -->
+    <script src="https://unpkg.com"></script>
 
     <script>
-        // CONFIGURATION DE VOS VARIABLES DE SÉCURITÉ CLOUD
-        const CONFIG_SUPABASE_URL = window.process?.env?.SUPABASE_URL || "https://supabase.co"; 
-        const CONFIG_SUPABASE_KEY = window.process?.env?.SUPABASE_KEY || "";              
+        const CONFIG_SUPABASE_URL = "https://supabase.co"; 
+        const CONFIG_SUPABASE_KEY = "VOTRE_CLE_ANON_PUBLIC_ICI";              
 
         let selectedRole = '';
         let kycDataStrings = { rectoString: "Fichier non requis", versoString: "Fichier non requis", selfieString: "Fichier non requis" };
         let compressionsEnCours = 0;
 
-        // Préchauffage des réseaux neuronaux de détection au chargement du site
         window.addEventListener('DOMContentLoaded', async () => {
             console.log("Initialisation de l'IA biométrique...");
             try {
+                // Chargement des fichiers de modèles IA
                 await faceapi.nets.ssdMobilenetv1.loadFromUri('https://githubusercontent.com');
                 await faceapi.nets.faceLandmark68Net.loadFromUri('https://githubusercontent.com');
                 await faceapi.nets.faceRecognitionNet.loadFromUri('https://githubusercontent.com');
-                console.log("Réseaux neuronaux My Job Pro actifs.");
-            } catch(e) { console.log("Liaison IA de secours prête."); }
+                console.log("Réseaux neuronaux My Job Pro opérationnels.");
+            } catch(e) { console.log("IA prête en mode écoute."); }
         });
 
         function selectProfile(role) {
@@ -57,7 +56,6 @@
             document.getElementById('step-1').style.display = 'none';
             document.getElementById('step-2').style.display = 'block';
 
-            // STYLE YANGO : Capture satellite invisible dès l'étape 2 pour éviter les blocages de temps
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((p) => {
                     document.getElementById('geo-lat').value = p.coords.latitude.toFixed(4);
@@ -117,7 +115,7 @@
                 lecteur.onload = function(e) {
                     const img = new Image();
                     img.src = e.target.result;
-                    img.id = "img-analysis-" + variableCible; //ID secret pour l'injecter dans l'IA
+                    img.id = "img-analysis-" + variableCible;
                     img.style.display = "none";
                     document.body.appendChild(img);
 
@@ -135,7 +133,7 @@
                         
                         const labelId = input.id === "fileRecto" ? "btn-recto" : (input.id === "fileVerso" ? "btn-verso" : "btn-selfie");
                         const elBtn = document.getElementById(labelId);
-                        elBtn.textContent = "✅ Photo synchronisée";
+                        elBtn.textContent = "✅ Photo mémorisée";
                         elBtn.style.background = "#2ECC71"; elBtn.style.color = "black";
 
                         compressionsEnCours--;
@@ -146,6 +144,11 @@
             }
         }
 
-        // ALGORITHME DE RECONNAISSANCE BIOMÉTRIQUE AUTONOME (SANS INTERVENTION HUMAINE)
         async function executerVerificationBiometriqueIA() {
             try {
+                const imgPiece = document.getElementById('img-analysis-rectoString');
+                const imgSelfie = document.getElementById('img-analysis-selfieString');
+
+                if (!imgPiece || !imgSelfie) return false;
+
+                const detectionPiece = await faceapi.detectSingleFace(imgPiece).withFaceLandmarks().withFaceDescriptor();
