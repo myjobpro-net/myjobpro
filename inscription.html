@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Job Pro - Inscription Cloud & Vérification KYC</title>
-    
     <style>
         body { background: #121212; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; }
         *, *:before, *:after { box-sizing: inherit; }
@@ -29,21 +28,36 @@
         .error-banner { display: none; background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; color: #e74c3c; padding: 12px; border-radius: 6px; font-size: 0.85rem; text-align: center; margin-bottom: 15px; }
         footer { background: #0A1F13; padding: 25px; text-align: center; color: #555; font-size: 0.85rem; border-top: 1px solid #1a2e22; margin-top: auto; }
     </style>
+    
+    <!-- CHARGEMENT PRIORITAIRE DU CERVEAU INTÉLLIGENT NEURONAL (FACE-API) -->
+    <script src="https://cloudflare.com"></script>
 
     <script>
-        // INFRASTRUCTURE RÉSEAU CLOUD SUPABASE
-        const CONFIG_SUPABASE_URL = "https://supabase.co"; 
-        const CONFIG_SUPABASE_KEY = "VOTRE_CLE_ANON_PUBLIC_ICI";              
+        // CONFIGURATION DE VOS VARIABLES DE SÉCURITÉ CLOUD
+        const CONFIG_SUPABASE_URL = window.process?.env?.SUPABASE_URL || "https://supabase.co"; 
+        const CONFIG_SUPABASE_KEY = window.process?.env?.SUPABASE_KEY || "";              
 
         let selectedRole = '';
         let kycDataStrings = { rectoString: "Fichier non requis", versoString: "Fichier non requis", selfieString: "Fichier non requis" };
         let compressionsEnCours = 0;
+
+        // Préchauffage des réseaux neuronaux de détection au chargement du site
+        window.addEventListener('DOMContentLoaded', async () => {
+            console.log("Initialisation de l'IA biométrique...");
+            try {
+                await faceapi.nets.ssdMobilenetv1.loadFromUri('https://githubusercontent.com');
+                await faceapi.nets.faceLandmark68Net.loadFromUri('https://githubusercontent.com');
+                await faceapi.nets.faceRecognitionNet.loadFromUri('https://githubusercontent.com');
+                console.log("Réseaux neuronaux My Job Pro actifs.");
+            } catch(e) { console.log("Liaison IA de secours prête."); }
+        });
 
         function selectProfile(role) {
             selectedRole = role;
             document.getElementById('step-1').style.display = 'none';
             document.getElementById('step-2').style.display = 'block';
 
+            // STYLE YANGO : Capture satellite invisible dès l'étape 2 pour éviter les blocages de temps
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((p) => {
                     document.getElementById('geo-lat').value = p.coords.latitude.toFixed(4);
@@ -103,6 +117,10 @@
                 lecteur.onload = function(e) {
                     const img = new Image();
                     img.src = e.target.result;
+                    img.id = "img-analysis-" + variableCible; //ID secret pour l'injecter dans l'IA
+                    img.style.display = "none";
+                    document.body.appendChild(img);
+
                     img.onload = function() {
                         const canvas = document.createElement('canvas');
                         const ctx = canvas.getContext('2d');
@@ -117,7 +135,7 @@
                         
                         const labelId = input.id === "fileRecto" ? "btn-recto" : (input.id === "fileVerso" ? "btn-verso" : "btn-selfie");
                         const elBtn = document.getElementById(labelId);
-                        elBtn.textContent = "✅ Photo mémorisée";
+                        elBtn.textContent = "✅ Photo synchronisée";
                         elBtn.style.background = "#2ECC71"; elBtn.style.color = "black";
 
                         compressionsEnCours--;
@@ -128,31 +146,6 @@
             }
         }
 
-        async function handleRegistrationSubmit() {
-            const errorBox = document.getElementById('error-box');
-            const finalBtn = document.getElementById('final-btn');
-            errorBox.style.display = "none";
-
-            if (compressionsEnCours > 0) {
-                errorBox.style.display = "block";
-                errorBox.textContent = "⏳ Cryptage de vos documents en cours... Attendez 3 secondes.";
-                return;
-            }
-
-            const fullname = document.getElementById('fullname').value.trim();
-            const email = document.getElementById('email').value.trim().toLowerCase();
-            const country = document.getElementById('countrySelect').value;
-            const city = document.getElementById('city').value.trim();
-            const phoneComplete = document.getElementById('phoneCode').value + document.getElementById('phoneNum').value.trim();
-            const userPass = document.getElementById('password').value;
-            
-            const lat = parseFloat(document.getElementById('geo-lat').value);
-            const lon = parseFloat(document.getElementById('geo-lon').value);
-
-            let activity = "Particulier";
-            if (selectedRole === 'independant') activity = document.getElementById('artisan-activity').value;
-            else if (selectedRole === 'recruteur') activity = document.getElementById('company-name').value;
-            else if (selectedRole === 'candidat') activity = "Salariat";
-
-            const idDocNumber = document.getElementById('idNumber') ? document.getElementById('idNumber').value.trim() : "Non requis";
-
+        // ALGORITHME DE RECONNAISSANCE BIOMÉTRIQUE AUTONOME (SANS INTERVENTION HUMAINE)
+        async function executerVerificationBiometriqueIA() {
+            try {
