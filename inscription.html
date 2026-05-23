@@ -28,127 +28,117 @@
         .error-banner { display: none; background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; color: #e74c3c; padding: 12px; border-radius: 6px; font-size: 0.85rem; text-align: center; margin-bottom: 15px; }
         footer { background: #0A1F13; padding: 25px; text-align: center; color: #555; font-size: 0.85rem; border-top: 1px solid #1a2e22; margin-top: auto; }
     </style>
-    
-    <!-- FIX SOLUTION : Utilisation de la version script standard distribuable (Umd) qui n'utilise pas l'importation de modules -->
-    <script src="https://unpkg.com"></script>
+</head>
+<body>
 
-    <script>
-        const CONFIG_SUPABASE_URL = "https://supabase.co"; 
-        const CONFIG_SUPABASE_KEY = "VOTRE_CLE_ANON_PUBLIC_ICI";              
+    <header>
+        <a href="index.html" class="logo-site">My Job Pro</a>
+        <div class="nav-right"><a href="connexion.html">Connexion</a></div>
+    </header>
 
-        let selectedRole = '';
-        let kycDataStrings = { rectoString: "Fichier non requis", versoString: "Fichier non requis", selfieString: "Fichier non requis" };
-        let compressionsEnCours = 0;
+    <div class="box">
+        <div id="error-box" class="error-banner"></div>
 
-        window.addEventListener('DOMContentLoaded', async () => {
-            console.log("Initialisation de l'IA biométrique...");
-            try {
-                // Chargement des fichiers de modèles IA
-                await faceapi.nets.ssdMobilenetv1.loadFromUri('https://githubusercontent.com');
-                await faceapi.nets.faceLandmark68Net.loadFromUri('https://githubusercontent.com');
-                await faceapi.nets.faceRecognitionNet.loadFromUri('https://githubusercontent.com');
-                console.log("Réseaux neuronaux My Job Pro opérationnels.");
-            } catch(e) { console.log("IA prête en mode écoute."); }
-        });
+        <!-- ÉTAPE 1 : CHOIX DU PROFIL -->
+        <div id="step-1">
+            <h1>Créer votre espace de travail</h1>
+            <div class="step-indicator">Étape 1 sur 3 : Choisissez votre profil mondial</div>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px;">
+                <button type="button" class="profile-btn" onclick="selectProfile('independant')"><span>👷‍♂️</span> Abonné Travailleur Indépendant / Freelance</button>
+                <button type="button" class="profile-btn" onclick="selectProfile('client')"><span>👤</span> Client Particulier (Donneur d'ordre)</button>
+                <button type="button" class="profile-btn" onclick="selectProfile('candidat')"><span>📄</span> Candidat à l'Emploi (Salariat)</button>
+                <button type="button" class="profile-btn" onclick="selectProfile('recruteur')"><span>🏢</span> Recruteur / Structure Entreprise</button>
+            </div>
+        </div>
 
-        function selectProfile(role) {
-            selectedRole = role;
-            document.getElementById('step-1').style.display = 'none';
-            document.getElementById('step-2').style.display = 'block';
+        <!-- ÉTAPE 2 : IDENTIFIANTS & LOCALISATION -->
+        <div id="step-2" style="display: none;">
+            <h1>Vos informations d'accès</h1>
+            <div class="step-indicator">Étape 2 sur 3 : Localisation & Identifiants</div>
+            <form onsubmit="event.preventDefault(); goToStep3();">
+                <label>Nom et Prénom</label>
+                <input type="text" id="fullname" placeholder="Ex: Moussa Traoré" required>
+                
+                <label>Adresse e-mail internationale</label>
+                <input type="email" id="email" placeholder="Ex: moussa@mail.com" required>
 
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition((p) => {
-                    document.getElementById('geo-lat').value = p.coords.latitude.toFixed(4);
-                    document.getElementById('geo-lon').value = p.coords.longitude.toFixed(4);
-                });
-            }
-        }
+                <div class="form-row">
+                    <div>
+                        <label>Sélectionnez votre Pays</label>
+                        <select id="countrySelect" onchange="updateCountryPhoneCode()" required>
+                            <option value="CI" data-code="+225" selected>Côte d'Ivoire 🇨🇮</option>
+                            <option value="SN" data-code="+221">Sénégal 🇸🇳</option>
+                            <option value="FR" data-code="+33">France 🇫🇷</option>
+                            <option value="BF" data-code="+226">Burkina Faso 🇧🇫</option>
+                            <option value="ML" data-code="+223">Mali 🇲🇱</option>
+                            <option value="CM" data-code="+237">Cameroun 🇨🇲</option>
+                            <option value="DE" data-code="+49">Allemagne 🇩🇪</option>
+                            <option value="US" data-code="+1">États-Unis 🇺🇸</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Ville / Commune / Quartier</label>
+                        <input type="text" id="city" placeholder="Ex: Paris, Abidjan Cocody" required>
+                    </div>
+                </div>
 
-        function updateCountryPhoneCode() {
-            const selector = document.getElementById('countrySelect');
-            const option = selector.options[selector.selectedIndex];
-            document.getElementById('phoneCode').value = option.getAttribute('data-code');
-        }
+                <div class="form-row">
+                    <div style="grid-column: span 2;">
+                        <label>Numéro de téléphone mobile</label>
+                        <div style="display: flex; gap: 5px;">
+                            <input type="text" id="phoneCode" style="width: 85px; text-align: center; font-weight: bold; background: #1a1a1a;" readonly value="+225">
+                            <input type="text" id="phoneNum" style="flex: 1;" placeholder="Ex: 0708091011" required>
+                        </div>
+                    </div>
+                </div>
 
-        function goToStep3() {
-            const errorBox = document.getElementById('error-box');
-            errorBox.style.display = "none";
+                <div class="form-row">
+                    <div>
+                        <label>Mot de passe</label>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+                    <div>
+                        <label>Confirmer le mot de passe</label>
+                        <input type="password" id="confirmPassword" placeholder="••••••••" required>
+                    </div>
+                </div>
 
-            const pass = document.getElementById('password').value;
-            const confirmPass = document.getElementById('confirmPassword').value;
+                <button type="submit" class="btn-submit">Continuer</button>
+            </form>
+        </div>
 
-            if (pass !== confirmPass) {
-                errorBox.style.display = "block";
-                errorBox.textContent = "❌ Les deux mots de passe ne correspondent pas. Veuillez vérifier.";
-                window.scrollTo(0,0);
-                return;
-            }
+        <!-- ÉTAPE 3 : CONTEXTUEL & PIÈCES KYC -->
+        <div id="step-3" style="display: none;">
+            <h1>Finalisation de l'espace</h1>
+            <div class="step-indicator">Étape 3 sur 3 : Validation du compte</div>
+            <form onsubmit="event.preventDefault(); handleRegistrationSubmit();">
+                
+                <div id="artisan-fields" style="display: none;">
+                    <label>Votre spécialité / Corps de métier</label>
+                    <input type="text" id="artisan-activity" placeholder="Ex: Électricien, Plombier, Développeur">
+                </div>
 
-            document.getElementById('step-2').style.display = 'none';
-            document.getElementById('step-3').style.display = 'block';
+                <div id="recruiter-fields" style="display: none;">
+                    <label>Nom de l'Entreprise / Structure</label>
+                    <input type="text" id="company-name" placeholder="Ex: Bâtiment Global SARL">
+                </div>
 
-            document.getElementById('artisan-fields').style.display = (selectedRole === 'independant') ? 'block' : 'none';
-            document.getElementById('recruiter-fields').style.display = (selectedRole === 'recruteur') ? 'block' : 'none';
+                <input type="hidden" id="geo-lat" value="5.3484">
+                <input type="hidden" id="geo-lon" value="-4.0305">
 
-            const blocKYC = document.getElementById('kyc-verification-panel');
-            if (selectedRole === 'independant' || selectedRole === 'client') {
-                blocKYC.style.display = 'block';
-                ajusterLabelsKYC();
-            } else {
-                blocKYC.style.display = 'none';
-            }
-        }
+                <div id="kyc-verification-panel" class="kyc-box" style="display: none;">
+                    <h3 style="margin-top:0; color:#FF8C00; font-size:1.05rem;">🔒 Protocole de Sécurité KYC Actif</h3>
+                    <p style="font-size:0.8rem; color:#aaa; margin-bottom:15px; line-height:1.4;">Pour activer la géo-sécurisation, veuillez charger vos documents officiels originaux.</p>
+                    
+                    <label>Type de document d'identité</label>
+                    <select id="idType" onchange="ajusterLabelsKYC()">
+                        <option value="CNI">Carte Nationale d'Identité (CNI) 🪪</option>
+                        <option value="PASSEPORT">Passeport International 📕</option>
+                        <option value="AUTRE">Autre pièce officielle (Permis/Carte Pro) 📄</option>
+                    </select>
 
-        function ajusterLabelsKYC() {
-            const type = document.getElementById('idType').value;
-            document.getElementById('lbl-id-number').textContent = type === "CNI" ? "Numéro de la Carte Nationale d'Identité" : "Numéro du document";
-            document.getElementById('div-file-verso').style.display = type === "PASSEPORT" ? "none" : "block";
-            if(type === "PASSEPORT") kycDataStrings.versoString = "Non requis pour Passeport";
-        }
+                    <label id="lbl-id-number">Numéro de la pièce d'identité</label>
+                    <input type="text" id="idNumber" placeholder="Ex: C01234567">
 
-        function compresserEtConvertirPhoto(input, variableCible) {
-            if (input.files && input.files[0]) {
-                compressionsEnCours++;
-                document.getElementById('final-btn').disabled = true;
-
-                const lecteur = new FileReader();
-                lecteur.onload = function(e) {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.id = "img-analysis-" + variableCible;
-                    img.style.display = "none";
-                    document.body.appendChild(img);
-
-                    img.onload = function() {
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        const MAX_WIDTH = 700;
-                        let width = img.width; let height = img.height;
-                        
-                        if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; }
-                        canvas.width = width; canvas.height = height;
-                        ctx.drawImage(img, 0, 0, width, height);
-                        
-                        kycDataStrings[variableCible] = canvas.toDataURL('image/jpeg', 0.5);
-                        
-                        const labelId = input.id === "fileRecto" ? "btn-recto" : (input.id === "fileVerso" ? "btn-verso" : "btn-selfie");
-                        const elBtn = document.getElementById(labelId);
-                        elBtn.textContent = "✅ Photo mémorisée";
-                        elBtn.style.background = "#2ECC71"; elBtn.style.color = "black";
-
-                        compressionsEnCours--;
-                        if(compressionsEnCours === 0) document.getElementById('final-btn').disabled = false;
-                    };
-                };
-                lecteur.readAsDataURL(input.files[0]);
-            }
-        }
-
-        async function executerVerificationBiometriqueIA() {
-            try {
-                const imgPiece = document.getElementById('img-analysis-rectoString');
-                const imgSelfie = document.getElementById('img-analysis-selfieString');
-
-                if (!imgPiece || !imgSelfie) return false;
-
-                const detectionPiece = await faceapi.detectSingleFace(imgPiece).withFaceLandmarks().withFaceDescriptor();
+                    <div class="form-row" style="margin-top: 15px;">
+                        <div>
