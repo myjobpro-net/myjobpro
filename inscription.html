@@ -18,7 +18,7 @@
 <body>
 
     <div class="box">
-        <!-- ÉTAPE 1 -->
+        <!-- ÉTAPE 1 : Choix du profil utilisateur -->
         <div id="step-1">
             <h1>Créer votre espace de travail</h1>
             <button type="button" class="profile-btn" onclick="selectProfile('independant')">👷‍♂️ Travailleur Indépendant / Freelance</button>
@@ -27,7 +27,7 @@
             <button type="button" class="profile-btn" onclick="selectProfile('recruteur')">🏢 Recruteur / Entreprise</button>
         </div>
 
-        <!-- ÉTAPE 2 -->
+        <!-- ÉTAPE 2 : Formulaire de saisie d'informations -->
         <div id="step-2" style="display: none;">
             <h1>Vos informations</h1>
             <form onsubmit="event.preventDefault(); finaliserInscriptionDirecte();">
@@ -38,17 +38,17 @@
                 <input type="email" id="email" required>
 
                 <label>Pays</label>
-                <select id="countrySelect">
-                    <option value="CI">Côte d'Ivoire 🇨🇮</option>
-                    <option value="SN">Sénégal 🇸🇳</option>
-                    <option value="FR">France 🇫🇷</option>
+                <!-- L'événement onchange appelle la mise à jour automatique de l'indicatif -->
+                <select id="countrySelect" onchange="majIndicatifTelephonique()" required>
+                    <option value="">Sélectionnez votre pays...</option>
+                    <!-- Rempli dynamiquement par le script JS -->
                 </select>
 
                 <label>Ville</label>
                 <input type="text" id="city" required>
 
                 <label>Téléphone</label>
-                <input type="text" id="phoneNum" placeholder="Ex: 0707070707" required>
+                <input type="text" id="phoneNum" placeholder="Sélectionnez d'abord un pays" required>
 
                 <label>Mot de passe</label>
                 <input type="password" id="password" required>
@@ -59,11 +59,73 @@
     </div>
 
     <script>
-        // CONFIGURATION DIRECTE LIÉE À VOTRE PROJET LIVE
-        const SUPABASE_URL = "https://supabase.co";
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbmhremhja2d5dGd4YWZmbGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5NTIsImV4cCI6MjA5NDk2Nzk1Mn0.lbvq-Xwo3fQP5UGBMROA4PafWWmF_B5PUiYx7NN3FxQ"; // ⚠️ METTEZ VOTRE CLÉ ICI
+        // CONFIGURATION DU PROJET SUPABASE
+        const SUPABASE_PROJECT_ID = "hqnhkrzhckgytgxafflcx"; 
+        const SUPABASE_URL = `https://${SUPABASE_PROJECT_ID}.supabase.co`; 
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbmhremhja2d5dGd4YWZmbGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5NTIsImV4cCI6MjA5NDk2Nzk1Mn0.lbvq-Xwo3fQP5UGBMROA4PafWWmF_B5PUiYx7NN3FxQ";
 
         let roleChoisi = '';
+
+        // Dictionnaire incluant le nom d'affichage et l'indicatif international (dial_code)
+        const baseDonneesPays = {
+            "CI": { nom: "Côte d'Ivoire 🇨🇮", indicatif: "+225" },
+            "SN": { nom: "Sénégal 🇸🇳", indicatif: "+221" },
+            "FR": { nom: "France 🇫🇷", indicatif: "+33" },
+            "MA": { nom: "Maroc 🇲🇦", indicatif: "+212" }, 
+            "DZ": { nom: "Algérie 🇩🇿", indicatif: "+213" }, 
+            "TN": { nom: "Tunisie 🇹🇳", indicatif: "+216" }, 
+            "BF": { nom: "Burkina Faso 🇧🇫", indicatif: "+226" }, 
+            "ML": { nom: "Mali 🇲🇱", indicatif: "+223" }, 
+            "GN": { nom: "Guinée 🇬🇳", indicatif: "+224" }, 
+            "NE": { nom: "Niger 🇳🇪", indicatif: "+227" }, 
+            "TG": { nom: "Togo 🇹🇬", indicatif: "+228" }, 
+            "BJ": { nom: "Bénin 🇧🇯", indicatif: "+229" }, 
+            "CM": { nom: "Cameroun 🇨🇲", indicatif: "+237" }, 
+            "GA": { nom: "Gabon 🇬🇦", indicatif: "+241" }, 
+            "CG": { nom: "Congo 🇨🇬", indicatif: "+242" }, 
+            "CD": { nom: "RDC 🇨🇩", indicatif: "+243" }, 
+            "BE": { nom: "Belgique 🇧🇪", indicatif: "+32" }, 
+            "CH": { nom: "Suisse 🇨🇭", indicatif: "+41" }, 
+            "CA": { nom: "Canada 🇨🇦", indicatif: "+1" }, 
+            "MG": { nom: "Madagascar 🇲🇬", indicatif: "+261" },
+            "MR": { nom: "Mauritanie 🇲🇷", indicatif: "+222" }, 
+            "TD": { nom: "Tchad 🇹🇩", indicatif: "+235" }, 
+            "BI": { nom: "Burundi 🇧🇮", indicatif: "+257" }, 
+            "RW": { nom: "Rwanda 🇷🇼", indicatif: "+250" }
+        };
+
+        // Charge la liste complète triée par ordre alphabétique
+        function chargerListePays() {
+            const select = document.getElementById("countrySelect");
+            
+            // Tri basé sur la propriété 'nom' du pays
+            const paysTries = Object.entries(baseDonneesPays).sort((a, b) => a[1].nom.localeCompare(b[1].nom));
+            
+            paysTries.forEach(([codeISO, donnees]) => {
+                let option = document.createElement("option");
+                option.value = codeISO;
+                option.textContent = donnees.nom;
+                select.appendChild(option);
+            });
+        }
+
+        // Met à jour automatiquement le préfixe téléphonique selon le pays sélectionné
+        function majIndicatifTelephonique() {
+            const codeISO = document.getElementById("countrySelect").value;
+            const champTelephone = document.getElementById("phoneNum");
+
+            if (codeISO && baseDonneesPays[codeISO]) {
+                const prefixe = baseDonneesPays[codeISO].indicatif;
+                // Injecte l'indicatif suivi d'un espace pour inviter à taper la suite
+                champTelephone.value = prefixe + " ";
+                champTelephone.placeholder = "Ex: " + prefixe + " 07070707";
+            } else {
+                champTelephone.value = "";
+                champTelephone.placeholder = "Sélectionnez d'abord un pays";
+            }
+        }
+
+        window.onload = chargerListePays;
 
         function selectProfile(role) {
             roleChoisi = role;
@@ -71,6 +133,7 @@
             document.getElementById('step-2').style.display = 'block';
         }
 
+        // Inscription de l'utilisateur avec Supabase Auth
         async function finaliserInscriptionDirecte() {
             const name = document.getElementById('fullname').value.trim();
             const email = document.getElementById('email').value.trim().toLowerCase();
@@ -79,33 +142,48 @@
             const phone = document.getElementById('phoneNum').value.trim();
             const pass = document.getElementById('password').value;
 
+            if (pass.length < 6) {
+                alert("Le mot de passe doit contenir au moins 6 caractères.");
+                return;
+            }
+
             try {
-                const response = await fetch(SUPABASE_URL + "/rest/v1/users", {
+                const response = await fetch(SUPABASE_URL + "/auth/v1/signup", {
                     method: 'POST',
                     headers: {
                         'apikey': SUPABASE_KEY,
-                        'Authorization': 'Bearer ' + SUPABASE_KEY,
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         email: email,
-                        name: name,
-                        role: roleChoisi,
-                        phone: phone,
-                        activity: "Inscrit via " + city + " (" + country + ")",
                         password: pass,
-                        is_verified: true
+                        options: {
+                            data: {
+                                full_name: name,
+                                role: roleChoisi,
+                                country: country, 
+                                city: city,
+                                phone: phone // Le numéro sera envoyé au format "+225 XXXXXXXX"
+                            }
+                        }
                     })
                 });
 
+                const data = await response.json();
+
                 if (response.ok) {
-                    alert("✓ Compte créé avec succès !");
+                    if (data.identities && data.identities.length === 0) {
+                        alert("Cet email est déjà lié à un compte existant.");
+                        return;
+                    }
+                    alert("✓ Inscription réussie !");
                     window.location.href = "connexion.html";
                 } else {
-                    alert("Erreur lors de l'enregistrement. Vérifiez vos clés.");
+                    alert("Erreur de l'API Supabase : " + (data.msg || data.error_description || "Une erreur est survenue."));
                 }
             } catch (err) {
-                alert("Erreur réseau ou clé Supabase manquante.");
+                alert("Erreur réseau : Impossible de contacter Supabase.");
+                console.error(err);
             }
         }
     </script>
