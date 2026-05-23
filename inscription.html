@@ -8,142 +8,104 @@
         body { background: #121212; color: #e0e0e0; font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
         .box { max-width: 500px; margin: 40px auto; padding: 30px; background: #1e1e1e; border-radius: 8px; border: 1px solid #333; }
         h1 { color: #FF8C00; font-size: 1.5rem; margin-bottom: 20px; }
-        .profile-btn { width: 100%; background: #2b2b2b; color: white; padding: 15px; margin: 10px 0; border: 1px solid #444; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: left; display: block; }
-        .profile-btn:hover { border-color: #FF8C00; background: #333; }
         label { display: block; text-align: left; margin-top: 15px; font-size: 0.85rem; color: #b0b0b0; }
         input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 6px; border: 1px solid #333; background: #2b2b2b; color: white; box-sizing: border-box; font-size: 1rem; }
-        .btn-submit { width: 100%; background: #FF8C00; color: white; padding: 14px; border: none; border-radius: 6px; font-weight: bold; margin-top: 20px; cursor: pointer; text-transform: uppercase; }
+        .btn-submit { width: 100%; background: #FF8C00; color: white; padding: 14px; border: none; border-radius: 6px; font-weight: bold; margin-top: 25px; cursor: pointer; text-transform: uppercase; width: 100%; }
     </style>
 </head>
 <body>
 
     <div class="box">
-        <!-- ÉTAPE 1 : Choix du profil -->
-        <div id="step-1">
-            <h1>Créer votre espace de travail</h1>
-            <button type="button" class="profile-btn" onclick="selectProfile('independant')">👷‍♂️ Travailleur Indépendant / Freelance</button>
-            <button type="button" class="profile-btn" onclick="selectProfile('client')">👤 Client Particulier</button>
-            <button type="button" class="profile-btn" onclick="selectProfile('candidat')">📄 Candidat à l'Emploi</button>
-            <button type="button" class="profile-btn" onclick="selectProfile('recruteur')">🏢 Recruteur / Entreprise</button>
-        </div>
+        <h1>Créer votre espace de travail</h1>
+        
+        <form id="inscriptionForm">
+            
+            <label>Votre profil</label>
+            <select id="roleChoisi" required>
+                <option value="">Sélectionnez votre type de profil...</option>
+                <option value="independant">👷‍♂️ Travailleur Indépendant / Freelance</option>
+                <option value="client">👤 Client Particulier</option>
+                <option value="candidat">📄 Candidat à l'Emploi</option>
+                <option value="recruteur">🏢 Recruteur / Entreprise</option>
+            </select>
 
-        <!-- ÉTAPE 2 : Saisie des informations de compte -->
-        <div id="step-2" style="display: none;">
-            <h1>Vos informations</h1>
-            <form onsubmit="event.preventDefault(); finaliserInscriptionDirecte();">
-                
-                <label>Nom et Prénom</label>
-                <input type="text" id="fullname" required>
-                
-                <label>Adresse e-mail</label>
-                <input type="email" id="email" required>
+            <label>Nom et Prénom</label>
+            <input type="text" id="fullname" required>
+            
+            <label>Adresse e-mail</label>
+            <input type="email" id="email" required>
 
-                <label>Pays</label>
-                <select id="countrySelect" onchange="majIndicatif()" required>
-                    <option value="">Sélectionnez votre pays...</option>
-                </select>
+            <label>Pays</label>
+            <select id="countrySelect" required>
+                <option value="">Sélectionnez votre pays de A à Z...</option>
+                <option value="CI" data-code="+225">Côte d'Ivoire 🇨🇮</option>
+                <option value="SN" data-code="+221">Sénégal 🇸🇳</option>
+                <option value="FR" data-code="+33">France 🇫🇷</option>
+                <option value="MA" data-code="+212">Maroc 🇲🇦</option>
+                <option value="DZ" data-code="+213">Algérie 🇩🇿</option>
+                <option value="TN" data-code="+216">Tunisie 🇹🇳</option>
+                <option value="BF" data-code="+226">Burkina Faso 🇧🇫</option>
+                <option value="ML" data-code="+223">Mali 🇲🇱</option>
+                <option value="GN" data-code="+224">Guinée 🇬🇳</option>
+                <option value="NE" data-code="+227">Niger 🇳🇪</option>
+                <option value="TG" data-code="+228">Togo 🇹🇬</option>
+                <option value="BJ" data-code="+229">Bénin 🇧🇯</option>
+                <option value="CM" data-code="+237">Cameroun 🇨🇲</option>
+                <option value="GA" data-code="+241">Gabon 🇬🇦</option>
+                <option value="CG" data-code="+242">Congo 🇨🇬</option>
+                <option value="CD" data-code="+243">Congo (RDC) 🇨🇩</option>
+                <option value="BE" data-code="+32">Belgique 🇧🇪</option>
+                <option value="CH" data-code="+41">Suisse 🇨🇭</option>
+                <option value="CA" data-code="+1">Canada 🇨🇦</option>
+                <option value="MG" data-code="+261">Madagascar 🇲🇬</option>
+                <option value="MR" data-code="+222">Mauritanie 🇲🇷</option>
+                <option value="TD" data-code="+235">Tchad 🇹🇩</option>
+                <option value="RW" data-code="+250">Rwanda 🇷🇼</option>
+                <option value="DE" data-code="+49">Allemagne 🇩🇪</option>
+                <option value="ES" data-code="+34">Espagne 🇪🇸</option>
+                <option value="IT" data-code="+39">Italie 🇮🇹</option>
+                <option value="US" data-code="+1">États-Unis 🇺🇸</option>
+                <option value="GB" data-code="+44">Royaume-Uni 🇬🇧</option>
+            </select>
 
-                <label>Ville</label>
-                <input type="text" id="city" required>
+            <label>Ville</label>
+            <input type="text" id="city" required>
 
-                <label>Numéro de téléphone</label>
-                <input type="text" id="phoneNum" placeholder="Sélectionnez d'abord le Pays" required>
+            <label>Numéro de téléphone</label>
+            <input type="text" id="phoneNum" placeholder="Ex: +225 0707070707" required>
 
-                <label>Mot de passe</label>
-                <input type="password" id="password" placeholder="Minimum 6 caractères" required>
+            <label>Mot de passe</label>
+            <input type="password" id="password" placeholder="Minimum 6 caractères" required>
 
-                <label>Confirmation du mot de passe</label>
-                <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe" required>
+            <label>Confirmation du mot de passe</label>
+            <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe" required>
 
-                <button type="submit" class="btn-submit">Finaliser l'inscription</button>
-            </form>
-        </div>
+            <button type="submit" class="btn-submit">Finaliser l'inscription</button>
+        </form>
     </div>
 
     <script>
-        // CONFIGURATION DU PROJET SUPABASE
         const SUPABASE_PROJECT_ID = "hqnhkrzhckgytgxafflcx"; 
         const SUPABASE_URL = `https://${SUPABASE_PROJECT_ID}.supabase.co`; 
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbmhremhja2d5dGd4YWZmbGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5NTIsImV4cCI6MjA5NDk2Nzk1Mn0.lbvq-Xwo3fQP5UGBMROA4PafWWmF_B5PUiYx7NN3FxQ";
 
-        let roleChoisi = '';
-
-        const rawCountries = [
-            {"code":"CI","dial":"+225","name":"Côte d'Ivoire","flag":"🇨🇮"},
-            {"code":"SN","dial":"+221","name":"Sénégal","flag":"🇸🇳"},
-            {"code":"FR","dial":"+33","name":"France","flag":"🇫🇷"},
-            {"code":"MA","dial":"+212","name":"Maroc","flag":"🇲🇦"},
-            {"code":"DZ","dial":"+213","name":"Algérie","flag":"🇩🇿"},
-            {"code":"TN","dial":"+216","name":"Tunisie","flag":"🇹🇳"},
-            {"code":"BF","dial":"+226","name":"Burkina Faso","flag":"🇧🇫"},
-            {"code":"ML","dial":"+223","name":"Mali","flag":"🇲🇱"},
-            {"code":"GN","dial":"+224","name":"Guinée","flag":"🇬🇳"},
-            {"code":"NE","dial":"+227","name":"Niger","flag":"🇳🇪"},
-            {"code":"TG","dial":"+228","name":"Togo","flag":"🇹🇬"},
-            {"code":"BJ","dial":"+229","name":"Bénin","flag":"🇧🇯"},
-            {"code":"CM","dial":"+237","name":"Cameroun","flag":"🇨🇲"},
-            {"code":"GA","dial":"+241","name":"Gabon","flag":"🇬🇦"},
-            {"code":"CG","dial":"+242","name":"Congo","flag":"🇨🇬"},
-            {"code":"CD","dial":"+243","name":"Congo RDC","flag":"🇨🇩"},
-            {"code":"BE","dial":"+32","name":"Belgique","flag":"🇧🇪"},
-            {"code":"CH","dial":"+41","name":"Suisse","flag":"🇨🇭"},
-            {"code":"CA","dial":"+1","name":"Canada","flag":"🇨🇦"},
-            {"code":"MG","dial":"+261","name":"Madagascar","flag":"🇲🇬"},
-            {"code":"MR","dial":"+222","name":"Mauritanie","flag":"🇲🇷"},
-            {"code":"TD","dial":"+235","name":"Tchad","flag":"🇹🇩"},
-            {"code":"RW","dial":"+250","name":"Rwanda","flag":"🇷🇼"},
-            {"code":"DE","dial":"+49","name":"Allemagne","flag":"🇩🇪"},
-            {"code":"ES","dial":"+34","name":"Espagne","flag":"🇪🇸"},
-            {"code":"IT","dial":"+39","name":"Italie","flag":"🇮🇹"},
-            {"code":"US","dial":"+1","name":"États-Unis","flag":"🇺🇸"},
-            {"code":"GB","dial":"+44","name":"Royaume-Uni","flag":"🇬🇧"}
-        ];
-
-        // Remplit la liste déroulante proprement au démarrage
-        window.addEventListener("DOMContentLoaded", () => {
-            const select = document.getElementById("countrySelect");
-            const sorted = rawCountries.sort((a, b) => a.name.localeCompare(b.name));
-            
-            sorted.forEach(p => {
-                const opt = document.createElement("option");
-                opt.value = p.code;
-                opt.setAttribute("data-code", p.dial);
-                opt.textContent = `${p.name} ${p.flag}`;
-                select.appendChild(opt);
-            });
+        // Gestion de l'indicatif automatique par écouteur d'événement standard
+        document.getElementById("countrySelect").addEventListener("change", function() {
+            const option = this.options[this.selectedIndex];
+            const code = option.getAttribute("data-code");
+            const phone = document.getElementById("phoneNum");
+            if(code) {
+                phone.value = code + " ";
+                phone.focus();
+            } else {
+                phone.value = "";
+            }
         });
 
-        // Gestion du clic pour passer à l'étape 2
-        function selectProfile(role) {
-            roleChoisi = role;
-            document.getElementById('step-1').style.display = 'none';
-            document.getElementById('step-2').style.display = 'block';
-        }
-
-        // Met automatiquement l'indicatif téléphonique à jour
-        function majIndicatif() {
-            const select = document.getElementById("countrySelect");
-            const optionSelectionnee = select.options[select.selectedIndex];
-            const indicatif = optionSelectionnee.getAttribute("data-code");
-            const champTelephone = document.getElementById("phoneNum");
-
-            if (indicatif) {
-                champTelephone.value = indicatif + " ";
-                champTelephone.focus();
-            } else {
-                champTelephone.value = "";
-            }
-        }
-
-        // Envoi final des données à Supabase Auth
-        async function finaliserInscriptionDirecte() {
-            const name = document.getElementById('fullname').value.trim();
-            const email = document.getElementById('email').value.trim().toLowerCase();
-            const selectPays = document.getElementById('countrySelect');
-            const codeISO = selectPays.value;
-            const nomPays = selectPays.options[selectPays.selectedIndex].text;
-            const city = document.getElementById('city').value.trim();
-            const phone = document.getElementById('phoneNum').value.trim();
+        // Soumission du formulaire
+        document.getElementById("inscriptionForm").addEventListener("submit", async function(e) {
+            e.preventDefault();
+            
             const pass = document.getElementById('password').value;
             const confirmPass = document.getElementById('confirmPassword').value;
 
@@ -165,16 +127,16 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        email: email,
+                        email: document.getElementById('email').value.trim().toLowerCase(),
                         password: pass,
                         options: {
                             data: {
-                                full_name: name,
-                                role: roleChoisi,
-                                country: codeISO, 
-                                country_name: nomPays,
-                                city: city,
-                                phone: phone
+                                full_name: document.getElementById('fullname').value.trim(),
+                                role: document.getElementById('roleChoisi').value,
+                                country: this.value, 
+                                country_name: document.getElementById('countrySelect').options[document.getElementById('countrySelect').selectedIndex].text,
+                                city: document.getElementById('city').value.trim(),
+                                phone: document.getElementById('phoneNum').value.trim()
                             }
                         }
                     })
@@ -193,3 +155,9 @@
                     alert("Erreur Supabase : " + (data.msg || data.error_description || "Une erreur est survenue."));
                 }
             } catch (err) {
+                alert("Erreur réseau : Impossible de joindre Supabase.");
+            }
+        });
+    </script>
+</body>
+</html>
