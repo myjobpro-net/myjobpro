@@ -3,142 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Job Pro - Inscription Cloud & Vérification KYC</title>
+    <title>My Job Pro - Inscription</title>
     <style>
-        body { background: #121212; color: #e0e0e0; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; box-sizing: border-box; }
-        *, *:before, *:after { box-sizing: inherit; }
-        header { background: #0A1F13; display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; border-bottom: 1px solid #1a2e22; box-shadow: 0 4px 15px rgba(0,0,0,0.6); }
-        .logo-site { color: #FF8C00; font-size: 1.5rem; font-weight: 800; text-transform: uppercase; text-decoration: none; }
-        .nav-right a { color: #2ECC71; text-decoration: none; font-weight: bold; font-size: 0.9rem; }
-        .box { max-width: 600px; width: 100%; margin: 40px auto; padding: 40px; background: #1e1e1e; border-radius: 12px; border: 1px solid #333; border-top: 5px solid #FF8C00; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
-        h1 { font-size: 1.6rem; font-weight: 600; text-align: center; margin-bottom: 5px; color: #ffffff; margin-top: 0; }
-        .step-indicator { text-align: center; color: #888; font-size: 14px; margin-bottom: 25px; }
-        label { display: block; margin-top: 15px; margin-bottom: 8px; font-size: 0.85rem; color: #b0b0b0; font-weight: 600; }
-        input[type="text"], input[type="email"], input[type="password"], input[type="number"], select { width: 100%; padding: 12px; border: 1px solid #333; border-radius: 6px; background: #2b2b2b; color: #f0f0f0; outline: none; font-size: 0.9rem; box-sizing: border-box; transition: border-color 0.3s; }
-        input:focus, select:focus { border-color: #FF8C00; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .btn-submit { width: 100%; background-color: #FF8C00; color: white; border: none; padding: 14px; font-size: 0.9rem; font-weight: bold; border-radius: 6px; cursor: pointer; text-transform: uppercase; margin-top: 25px; }
-        .btn-submit:hover { background-color: #e67e00; }
-        .btn-submit:disabled { background-color: #444; color: #888; cursor: not-allowed; }
-        .profile-btn { background:#2b2b2b; color:white; padding:18px; border:1px solid #444; border-radius:8px; font-weight:bold; cursor:pointer; text-align: left; font-size: 0.95rem; display: flex; align-items: center; gap: 15px; transition: 0.3s; width: 100%; }
-        .profile-btn:hover { border-color: #FF8C00; background: #222; }
-        .kyc-box { background: rgba(255, 140, 0, 0.03); border: 1px dashed #FF8C00; padding: 20px; border-radius: 8px; margin-top: 15px; }
-        .file-input-label { background: #0A1F13; border: 1px solid #2ECC71; color: #2ECC71; padding: 10px; display: inline-block; border-radius: 5px; cursor: pointer; font-size: 0.8rem; font-weight: bold; text-align: center; width: 100%; box-sizing: border-box; margin-top: 5px; }
-        input[type="file"] { display: none; }
-        .error-banner { display: none; background: rgba(231, 76, 60, 0.1); border: 1px solid #e74c3c; color: #e74c3c; padding: 12px; border-radius: 6px; font-size: 0.85rem; text-align: center; margin-bottom: 15px; }
-        footer { background: #0A1F13; padding: 25px; text-align: center; color: #555; font-size: 0.85rem; border-top: 1px solid #1a2e22; margin-top: auto; }
+        body { background: #121212; color: #e0e0e0; font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
+        .box { max-width: 500px; margin: 40px auto; padding: 30px; background: #1e1e1e; border-radius: 8px; border: 1px solid #333; }
+        h1 { color: #FF8C00; font-size: 1.5rem; }
+        .profile-btn { width: 100%; background: #2b2b2b; color: white; padding: 15px; margin: 10px 0; border: 1px solid #444; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: left; }
+        .profile-btn:hover { border-color: #FF8C00; }
+        label { display: block; text-align: left; margin-top: 15px; font-size: 0.85rem; color: #b0b0b0; }
+        input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 6px; border: 1px solid #333; background: #2b2b2b; color: white; box-sizing: border-box; }
+        .btn-submit { width: 100%; background: #FF8C00; color: white; padding: 14px; border: none; border-radius: 6px; font-weight: bold; margin-top: 20px; cursor: pointer; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <header>
-        <a href="index.html" class="logo-site">My Job Pro</a>
-        <div class="nav-right"><a href="connexion.html">Connexion</a></div>
-    </header>
-
     <div class="box">
-        <div id="error-box" class="error-banner"></div>
-
-        <!-- ÉTAPE 1 : CHOIX DU PROFIL -->
+        <!-- ÉTAPE 1 -->
         <div id="step-1">
             <h1>Créer votre espace de travail</h1>
-            <div class="step-indicator">Étape 1 sur 3 : Choisissez votre profil mondial</div>
-            <div style="display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 20px;">
-                <button type="button" class="profile-btn" onclick="selectProfile('independant')"><span>👷‍♂️</span> Abonné Travailleur Indépendant / Freelance</button>
-                <button type="button" class="profile-btn" onclick="selectProfile('client')"><span>👤</span> Client Particulier (Donneur d'ordre)</button>
-                <button type="button" class="profile-btn" onclick="selectProfile('candidat')"><span>📄</span> Candidat à l'Emploi (Salariat)</button>
-                <button type="button" class="profile-btn" onclick="selectProfile('recruteur')"><span>🏢</span> Recruteur / Structure Entreprise</button>
-            </div>
+            <button type="button" class="profile-btn" onclick="selectProfile('independant')">👷‍♂️ Travailleur Indépendant / Freelance</button>
+            <button type="button" class="profile-btn" onclick="selectProfile('client')">👤 Client Particulier</button>
+            <button type="button" class="profile-btn" onclick="selectProfile('candidat')">📄 Candidat à l'Emploi</button>
+            <button type="button" class="profile-btn" onclick="selectProfile('recruteur')">🏢 Recruteur / Entreprise</button>
         </div>
 
-        <!-- ÉTAPE 2 : IDENTIFIANTS & LOCALISATION -->
+        <!-- ÉTAPE 2 -->
         <div id="step-2" style="display: none;">
-            <h1>Vos informations d'accès</h1>
-            <div class="step-indicator">Étape 2 sur 3 : Localisation & Identifiants</div>
-            <form onsubmit="event.preventDefault(); goToStep3();">
+            <h1>Vos informations</h1>
+            <form onsubmit="event.preventDefault(); finaliserInscriptionDirecte();">
                 <label>Nom et Prénom</label>
-                <input type="text" id="fullname" placeholder="Ex: Moussa Traoré" required>
+                <input type="text" id="fullname" required>
                 
-                <label>Adresse e-mail internationale</label>
-                <input type="email" id="email" placeholder="Ex: moussa@mail.com" required>
+                <label>Adresse e-mail</label>
+                <input type="email" id="email" required>
 
-                <div class="form-row">
-                    <div>
-                        <label>Sélectionnez votre Pays</label>
-                        <select id="countrySelect" onchange="updateCountryPhoneCode()" required>
-                            <option value="CI" data-code="+225" selected>Côte d'Ivoire 🇨🇮</option>
-                            <option value="SN" data-code="+221">Sénégal 🇸🇳</option>
-                            <option value="FR" data-code="+33">France 🇫🇷</option>
-                            <option value="BF" data-code="+226">Burkina Faso 🇧🇫</option>
-                            <option value="ML" data-code="+223">Mali 🇲🇱</option>
-                            <option value="CM" data-code="+237">Cameroun 🇨🇲</option>
-                            <option value="DE" data-code="+49">Allemagne 🇩🇪</option>
-                            <option value="US" data-code="+1">États-Unis 🇺🇸</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>Ville / Commune / Quartier</label>
-                        <input type="text" id="city" placeholder="Ex: Paris, Abidjan Cocody" required>
-                    </div>
-                </div>
+                <label>Pays</label>
+                <select id="countrySelect">
+                    <option value="CI">Côte d'Ivoire 🇨🇮</option>
+                    <option value="SN">Sénégal 🇸🇳</option>
+                    <option value="FR">France 🇫🇷</option>
+                </select>
 
-                <div class="form-row">
-                    <div style="grid-column: span 2;">
-                        <label>Numéro de téléphone mobile</label>
-                        <div style="display: flex; gap: 5px;">
-                            <input type="text" id="phoneCode" style="width: 85px; text-align: center; font-weight: bold; background: #1a1a1a;" readonly value="+225">
-                            <input type="text" id="phoneNum" style="flex: 1;" placeholder="Ex: 0708091011" required>
-                        </div>
-                    </div>
-                </div>
+                <label>Ville</label>
+                <input type="text" id="city" required>
 
-                <div class="form-row">
-                    <div>
-                        <label>Mot de passe</label>
-                        <input type="password" id="password" placeholder="••••••••" required>
-                    </div>
-                    <div>
-                        <label>Confirmer le mot de passe</label>
-                        <input type="password" id="confirmPassword" placeholder="••••••••" required>
-                    </div>
-                </div>
+                <label>Téléphone</label>
+                <input type="text" id="phoneNum" placeholder="Ex: 0707070707" required>
 
-                <button type="submit" class="btn-submit">Continuer</button>
+                <label>Mot de passe</label>
+                <input type="password" id="password" required>
+
+                <button type="submit" class="btn-submit">Finaliser l'inscription</button>
             </form>
         </div>
+    </div>
 
-        <!-- ÉTAPE 3 : MODULE CONTEXTUEL PROFESSIONNEL & PIÈCES CONFORMITÉ KYC -->
-        <div id="step-3" style="display: none;">
-            <h1>Finalisation de l'espace</h1>
-            <div class="step-indicator">Étape 3 sur 3 : Validation du compte</div>
-            <form onsubmit="event.preventDefault(); handleRegistrationSubmit();">
-                
-                <div id="artisan-fields" style="display: none;">
-                    <label>Votre spécialité / Corps de métier</label>
-                    <input type="text" id="artisan-activity" placeholder="Ex: Électricien, Plombier, Développeur">
-                </div>
+    <script>
+        // CONFIGURATION DIRECTE LIÉE À VOTRE PROJET LIVE
+        const SUPABASE_URL = "https://supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbmhremhja2d5dGd4YWZmbGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5NTIsImV4cCI6MjA5NDk2Nzk1Mn0.lbvq-Xwo3fQP5UGBMROA4PafWWmF_B5PUiYx7NN3FxQ"; // ⚠️ METTEZ VOTRE CLÉ ICI
 
-                <div id="recruiter-fields" style="display: none;">
-                    <label>Nom de l'Entreprise / Structure</label>
-                    <input type="text" id="company-name" placeholder="Ex: Bâtiment Global SARL">
-                </div>
+        let roleChoisi = '';
 
-                <input type="hidden" id="geo-lat" value="5.3484">
-                <input type="hidden" id="geo-lon" value="-4.0305">
+        function selectProfile(role) {
+            roleChoisi = role;
+            document.getElementById('step-1').style.display = 'none';
+            document.getElementById('step-2').style.display = 'block';
+        }
 
-                <div id="kyc-verification-panel" class="kyc-box" style="display: none;">
-                    <h3 style="margin-top:0; color:#FF8C00; font-size:1.05rem;">🔒 Protocole de Sécurité KYC Actif</h3>
-                    <p style="font-size:0.8rem; color:#aaa; margin-bottom:15px; line-height:1.4;">Pour activer la géo-sécurisation, veuillez charger vos documents officiels originaux.</p>
-                    
-                    <label>Type de document d'identité</label>
-                    <select id="idType" onchange="ajusterLabelsKYC()">
-                        <option value="CNI">Carte Nationale d'Identité (CNI) 🪪</option>
-                        <option value="PASSEPORT">Passeport International 📕</option>
-                        <option value="AUTRE">Autre pièce officielle (Permis/Carte Pro) 📄</option>
-                    </select>
+        async function finaliserInscriptionDirecte() {
+            const name = document.getElementById('fullname').value.trim();
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const country = document.getElementById('countrySelect').value;
+            const city = document.getElementById('city').value.trim();
+            const phone = document.getElementById('phoneNum').value.trim();
+            const pass = document.getElementById('password').value;
 
-                    <label id="lbl-id-number">Numéro de la pièce d'identité</label>
-                    <input type="text" id="idNumber" placeholder="Ex: C01234567">
+            try {
+                const response = await fetch(SUPABASE_URL + "/rest/v1/users", {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_KEY,
+                        'Authorization': 'Bearer ' + SUPABASE_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        name: name,
+                        role: roleChoisi,
+                        phone: phone,
+                        activity: "Inscrit via " + city + " (" + country + ")",
+                        password: pass,
+                        is_verified: true
+                    })
+                });
 
-                    <div class="form-row" style="margin-top: 15px;">
-                        <div>
+                if (response.ok) {
+                    alert("✓ Compte créé avec succès !");
+                    window.location.href = "connexion.html";
+                } else {
+                    alert("Erreur lors de l'enregistrement. Vérifiez vos clés.");
+                }
+            } catch (err) {
+                alert("Erreur réseau ou clé Supabase manquante.");
+            }
+        }
+    </script>
+</body>
+</html>
