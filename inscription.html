@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Job Pro - Inscription</title>
-    <!-- Chargement des styles officiels pour les drapeaux mondiaux -->
+    <!-- Chargement des styles graphiques officiels pour les drapeaux du monde -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <style>
         body { background: #121212; color: #e0e0e0; font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
@@ -16,11 +16,12 @@
         input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 6px; border: 1px solid #333; background: #2b2b2b; color: white; box-sizing: border-box; }
         .btn-submit { width: 100%; background: #FF8C00; color: white; padding: 14px; border: none; border-radius: 6px; font-weight: bold; margin-top: 20px; cursor: pointer; text-transform: uppercase; }
         
-        /* Ajustements spécifiques exigés par intl-tel-input pour le thème sombre */
+        /* Ajustements CSS pour le sélecteur universel de pays */
         .iti { width: 100%; text-align: left; margin-top: 5px; }
-        .iti__country-list { background-color: #1e1e1e; border: 1px solid #333; color: white; }
+        .iti__country-list { background-color: #1e1e1e; border: 1px solid #333; color: white; max-height: 200px; }
         .iti__country:hover { background-color: #2b2b2b; }
         .iti__selected-country { background-color: #2b2b2b; }
+        .iti__search-input { background-color: #121212; color: white; border: 1px solid #444; }
     </style>
 </head>
 <body>
@@ -45,8 +46,11 @@
                 <label>Adresse e-mail</label>
                 <input type="email" id="email" required>
 
+                <label>Pays (Recherche de A à Z)</label>
+                <!-- Ce champ va se transformer en sélecteur de pays complet avec tous les drapeaux du monde -->
+                <input type="text" id="countrySelectorField" required>
+
                 <label>Numéro de téléphone</label>
-                <!-- Le plugin injectera lui-même le menu des pays et l'indicatif ici -->
                 <input type="tel" id="phoneNum" required>
 
                 <label>Ville</label>
@@ -63,7 +67,7 @@
         </div>
     </div>
 
-    <!-- Script requis par le plugin pour charger la base mondiale des pays et drapeaux -->
+    <!-- Script requis pour générer la base mondiale de tous les drapeaux et pays -->
     <script src="https://jsdelivr.net"></script>
     <script>
         // CONFIGURATION DU PROJET SUPABASE
@@ -72,27 +76,51 @@
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhxbmhremhja2d5dGd4YWZmbGN4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzOTE5NTIsImV4cCI6MjA5NDk2Nzk1Mn0.lbvq-Xwo3fQP5UGBMROA4PafWWmF_B5PUiYx7NN3FxQ";
 
         let roleChoisi = '';
-        let itiInstance;
+        let itiCountryInstance;
+        let itiPhoneInstance;
 
-        // Déclenche l'affichage du gestionnaire de numéros internationaux
-        function initialiserDrapeaux() {
-            const inputTelephone = document.querySelector("#phoneNum");
-            itiInstance = window.intlTelInput(inputTelephone, {
-                initialCountry: "ci", // Côte d'Ivoire présélectionnée par défaut
-                preferredCountries: ["ci", "sn", "fr", "ma"], // Placé en tête de liste pour plus de confort
-                separateDialCode: true, // Sépare visuellement l'indicatif (+225) du champ de saisie
+        // Déclenche l'affichage complet de la liste des pays de A à Z avec les drapeaux
+        function initialiserComposantsSaisie() {
+            // 1. Initialisation du sélecteur de pays autonome (Affiche la liste complète triée avec drapeaux)
+            const countryInput = document.querySelector("#countrySelectorField");
+            itiCountryInstance = window.intlTelInput(countryInput, {
+                initialCountry: "ci",
+                preferredCountries: ["ci", "sn", "fr", "ma"],
+                showSelectedDialCode: false, // On ne garde que le nom pour la case pays
+                countrySearch: true, // Active une barre de recherche de A à Z
                 utilsScript: "https://jsdelivr.net"
             });
+
+            // 2. Initialisation du champ Téléphone associé
+            const phoneInput = document.querySelector("#phoneNum");
+            itiPhoneInstance = window.intlTelInput(phoneInput, {
+                initialCountry: "ci",
+                separateDialCode: true, // Affiche l'indicatif séparé (ex: +225)
+                allowDropdown: false, // Bloque la liste ici pour éviter les doublons de clics
+                utilsScript: "https://jsdelivr.net"
+            });
+
+            // Synchronisation automatique : quand l'utilisateur change de pays, l'indicatif téléphone s'ajuste
+            countryInput.addEventListener("countrychange", function() {
+                const countryData = itiCountryInstance.getSelectedCountryData();
+                itiPhoneInstance.setCountry(countryData.iso2); // Aligne le code téléphone sur le pays choisi
+                countryInput.value = countryData.name; // Écrit le nom propre du pays dans la case
+            });
+            
+            // Écrit le nom par défaut à l'ouverture
+            setTimeout(() => {
+                countryInput.value = itiCountryInstance.getSelectedCountryData().name;
+            }, 100);
         }
 
         function selectProfile(role) {
             roleChoisi = role;
             document.getElementById('step-1').style.display = 'none';
             document.getElementById('step-2').style.display = 'block';
-            initialiserDrapeaux(); // Initialise proprement le champ téléphone
+            initialiserComposantsSaisie(); // Déploie les sélecteurs dynamiques mondiaux
         }
 
-        // Envoi des données vers le serveur d'authentification Supabase
+        // Envoi sécurisé des données et contrôle des mots de passe
         async function finaliserInscriptionDirecte() {
             const name = document.getElementById('fullname').value.trim();
             const email = document.getElementById('email').value.trim().toLowerCase();
@@ -100,22 +128,22 @@
             const pass = document.getElementById('password').value;
             const confirmPass = document.getElementById('confirmPassword').value;
 
-            // 1. Validation : Les deux mots de passe doivent être strictement identiques
+            // 1. Validation de la confirmation du mot de passe
             if (pass !== confirmPass) {
                 alert("❌ Les mots de passe ne correspondent pas.");
                 return;
             }
 
-            // 2. Validation : Règles de longueur de mot de passe Supabase Auth
+            // 2. Règle de sécurité de l'API d'authentification Supabase
             if (pass.length < 6) {
                 alert("❌ Le mot de passe doit contenir au moins 6 caractères.");
                 return;
             }
 
-            // 3. Extraction automatique des informations du pays et du numéro au format international
-            const numeroComplet = itiInstance.getNumber(); // Récupère le numéro propre (ex: +225XXXXXXXX)
-            const codeISO = itiInstance.getSelectedCountryData().iso2.toUpperCase(); // Code pays standard (ex: CI)
-            const nomPays = itiInstance.getSelectedCountryData().name; // Nom complet du pays
+            // 3. Récupération des informations standardisées de localisation et téléphone
+            const numeroComplet = itiPhoneInstance.getNumber(); // Récupère le numéro international (ex: +225XXXX)
+            const codeISO = itiCountryInstance.getSelectedCountryData().iso2.toUpperCase(); // Code pays standardisé (ex: "CI")
+            const nomPays = itiCountryInstance.getSelectedCountryData().name; // Nom complet du pays choisi
 
             try {
                 const response = await fetch(SUPABASE_URL + "/auth/v1/signup", {
@@ -153,10 +181,3 @@
                     alert("Erreur Supabase : " + (data.msg || data.error_description || "Une erreur est survenue."));
                 }
             } catch (err) {
-                alert("Erreur réseau : Impossible de joindre Supabase.");
-                console.error(err);
-            }
-        }
-    </script>
-</body>
-</html>
