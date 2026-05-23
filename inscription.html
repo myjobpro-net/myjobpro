@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Job Pro - Inscription</title>
-    <!-- Chargement de la feuille de style des drapeaux mondiaux -->
+    <!-- Chargement des styles officiels pour les drapeaux mondiaux -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <style>
         body { background: #121212; color: #e0e0e0; font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
@@ -16,7 +16,7 @@
         input, select { width: 100%; padding: 12px; margin-top: 5px; border-radius: 6px; border: 1px solid #333; background: #2b2b2b; color: white; box-sizing: border-box; }
         .btn-submit { width: 100%; background: #FF8C00; color: white; padding: 14px; border: none; border-radius: 6px; font-weight: bold; margin-top: 20px; cursor: pointer; text-transform: uppercase; }
         
-        /* Ajustements CSS spécifiques pour le plugin de drapeaux */
+        /* Ajustements spécifiques exigés par intl-tel-input pour le thème sombre */
         .iti { width: 100%; text-align: left; margin-top: 5px; }
         .iti__country-list { background-color: #1e1e1e; border: 1px solid #333; color: white; }
         .iti__country:hover { background-color: #2b2b2b; }
@@ -26,7 +26,7 @@
 <body>
 
     <div class="box">
-        <!-- ÉTAPE 1 : Choix du profil utilisateur -->
+        <!-- ÉTAPE 1 : Choix du profil -->
         <div id="step-1">
             <h1>Créer votre espace de travail</h1>
             <button type="button" class="profile-btn" onclick="selectProfile('independant')">👷‍♂️ Travailleur Indépendant / Freelance</button>
@@ -35,7 +35,7 @@
             <button type="button" class="profile-btn" onclick="selectProfile('recruteur')">🏢 Recruteur / Entreprise</button>
         </div>
 
-        <!-- ÉTAPE 2 : Formulaire de saisie d'informations -->
+        <!-- ÉTAPE 2 : Saisie des informations de compte -->
         <div id="step-2" style="display: none;">
             <h1>Vos informations</h1>
             <form onsubmit="event.preventDefault(); finaliserInscriptionDirecte();">
@@ -45,7 +45,8 @@
                 <label>Adresse e-mail</label>
                 <input type="email" id="email" required>
 
-                <label>Téléphone international (Sélectionnez le drapeau)</label>
+                <label>Numéro de téléphone</label>
+                <!-- Le plugin injectera lui-même le menu des pays et l'indicatif ici -->
                 <input type="tel" id="phoneNum" required>
 
                 <label>Ville</label>
@@ -54,15 +55,15 @@
                 <label>Mot de passe</label>
                 <input type="password" id="password" placeholder="Minimum 6 caractères" required>
 
-                <label>Confirmez votre mot de passe</label>
-                <input type="password" id="confirmPassword" placeholder="Répétez le mot de passe" required>
+                <label>Confirmation du mot de passe</label>
+                <input type="password" id="confirmPassword" placeholder="Confirmez votre mot de passe" required>
 
                 <button type="submit" class="btn-submit">Finaliser l'inscription</button>
             </form>
         </div>
     </div>
 
-    <!-- Script requis pour charger la base de données mondiale des drapeaux et indicatifs -->
+    <!-- Script requis par le plugin pour charger la base mondiale des pays et drapeaux -->
     <script src="https://jsdelivr.net"></script>
     <script>
         // CONFIGURATION DU PROJET SUPABASE
@@ -73,13 +74,13 @@
         let roleChoisi = '';
         let itiInstance;
 
-        // Initialisation de la liste des pays de A à Z avec drapeaux dès que le formulaire s'affiche
+        // Déclenche l'affichage du gestionnaire de numéros internationaux
         function initialiserDrapeaux() {
             const inputTelephone = document.querySelector("#phoneNum");
             itiInstance = window.intlTelInput(inputTelephone, {
-                initialCountry: "ci", // Côte d'Ivoire par défaut, s'adapte selon vos besoins
-                preferredCountries: ["ci", "sn", "fr", "ma"], // Pays mis en haut de la liste pour confort
-                separateDialCode: true, // Affiche l'indicatif (+225) à côté du drapeau
+                initialCountry: "ci", // Côte d'Ivoire présélectionnée par défaut
+                preferredCountries: ["ci", "sn", "fr", "ma"], // Placé en tête de liste pour plus de confort
+                separateDialCode: true, // Sépare visuellement l'indicatif (+225) du champ de saisie
                 utilsScript: "https://jsdelivr.net"
             });
         }
@@ -88,10 +89,10 @@
             roleChoisi = role;
             document.getElementById('step-1').style.display = 'none';
             document.getElementById('step-2').style.display = 'block';
-            initialiserDrapeaux(); // Lance le module mondial au moment de l'affichage du formulaire
+            initialiserDrapeaux(); // Initialise proprement le champ téléphone
         }
 
-        // Inscription de l'utilisateur avec validations avancées
+        // Envoi des données vers le serveur d'authentification Supabase
         async function finaliserInscriptionDirecte() {
             const name = document.getElementById('fullname').value.trim();
             const email = document.getElementById('email').value.trim().toLowerCase();
@@ -99,22 +100,22 @@
             const pass = document.getElementById('password').value;
             const confirmPass = document.getElementById('confirmPassword').value;
 
-            // 1. Validation de la correspondance des mots de passe
+            // 1. Validation : Les deux mots de passe doivent être strictement identiques
             if (pass !== confirmPass) {
-                alert("❌ Erreur : Les deux mots de passe ne correspondent pas.");
+                alert("❌ Les mots de passe ne correspondent pas.");
                 return;
             }
 
-            // 2. Validation de la longueur minimale imposée par Supabase
+            // 2. Validation : Règles de longueur de mot de passe Supabase Auth
             if (pass.length < 6) {
-                alert("❌ Erreur : Le mot de passe doit contenir au moins 6 caractères.");
+                alert("❌ Le mot de passe doit contenir au moins 6 caractères.");
                 return;
             }
 
-            // 3. Extraction du numéro complet propre (ex: +2250707070707) et du pays choisi
-            const numeroComplet = itiInstance.getNumber();
-            const paysChoisi = itiInstance.getSelectedCountryData().name;
-            const codeISO = itiInstance.getSelectedCountryData().iso2.toUpperCase();
+            // 3. Extraction automatique des informations du pays et du numéro au format international
+            const numeroComplet = itiInstance.getNumber(); // Récupère le numéro propre (ex: +225XXXXXXXX)
+            const codeISO = itiInstance.getSelectedCountryData().iso2.toUpperCase(); // Code pays standard (ex: CI)
+            const nomPays = itiInstance.getSelectedCountryData().name; // Nom complet du pays
 
             try {
                 const response = await fetch(SUPABASE_URL + "/auth/v1/signup", {
@@ -130,10 +131,10 @@
                             data: {
                                 full_name: name,
                                 role: roleChoisi,
-                                country: codeISO, // Stocke le code pays standardisé (ex: "CI", "SN", "CA")
-                                country_name: paysChoisi,
+                                country: codeISO, 
+                                country_name: nomPays,
                                 city: city,
-                                phone: numeroComplet // Numéro finalisé et nettoyé au format international
+                                phone: numeroComplet
                             }
                         }
                     })
@@ -149,7 +150,7 @@
                     alert("✓ Inscription réussie !");
                     window.location.href = "connexion.html";
                 } else {
-                    alert("Erreur de l'API Supabase : " + (data.msg || data.error_description || "Une erreur est survenue."));
+                    alert("Erreur Supabase : " + (data.msg || data.error_description || "Une erreur est survenue."));
                 }
             } catch (err) {
                 alert("Erreur réseau : Impossible de joindre Supabase.");
