@@ -4,24 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Job Pro - Inscription</title>
-    <!-- Chargement de la feuille de style officielle pour les drapeaux du monde entier -->
+    <!-- Chargement optimisé des feuilles de style pour éviter les saccades au clic -->
     <link rel="stylesheet" href="https://jsdelivr.net">
     <style>
         body { background: #121212; color: #e0e0e0; font-family: sans-serif; margin: 0; padding: 20px; text-align: center; }
         .box { max-width: 500px; margin: 40px auto; padding: 30px; background: #1e1e1e; border-radius: 8px; border: 1px solid #333; }
         h1 { color: #FF8C00; font-size: 1.5rem; }
-        .profile-btn { width: 100%; background: #2b2b2b; color: white; padding: 15px; margin: 10px 0; border: 1px solid #444; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: left; }
-        .profile-btn:hover { border-color: #FF8C00; }
+        .profile-btn { width: 100%; background: #2b2b2b; color: white; padding: 15px; margin: 10px 0; border: 1px solid #444; border-radius: 6px; font-weight: bold; cursor: pointer; text-align: left; display: block; }
+        .profile-btn:hover { border-color: #FF8C00; background: #333; }
         label { display: block; text-align: left; margin-top: 15px; font-size: 0.85rem; color: #b0b0b0; }
         input { width: 100%; padding: 12px; margin-top: 5px; border-radius: 6px; border: 1px solid #333; background: #2b2b2b; color: white; box-sizing: border-box; }
         .btn-submit { width: 100%; background: #FF8C00; color: white; padding: 14px; border: none; border-radius: 6px; font-weight: bold; margin-top: 20px; cursor: pointer; text-transform: uppercase; }
         
-        /* Personnalisation du menu déroulant des drapeaux pour notre thème sombre */
+        /* Personnalisation CSS fluide de la boîte des pays */
         .iti { width: 100%; text-align: left; margin-top: 5px; }
-        .iti__country-list { background-color: #1e1e1e; border: 1px solid #333; color: white; max-height: 250px; }
+        .iti__country-list { background-color: #1e1e1e; border: 1px solid #333; color: white; max-height: 200px; }
         .iti__country:hover { background-color: #2b2b2b; }
         .iti__selected-country { background-color: #2b2b2b; }
-        .iti__search-input { background-color: #121212; color: white; border: 1px solid #444; padding: 8px; border-radius: 4px; }
     </style>
 </head>
 <body>
@@ -46,8 +45,7 @@
                 <label>Adresse e-mail</label>
                 <input type="email" id="email" required>
 
-                <label>Numéro de téléphone (Cliquez sur le drapeau pour chercher votre Pays de A à Z)</label>
-                <!-- Ce champ unique gère les pays, la recherche textuelle, les drapeaux et l'indicatif -->
+                <label>Numéro de téléphone (Cliquez sur le drapeau pour choisir votre pays)</label>
                 <input type="tel" id="phoneNum" required>
 
                 <label>Ville</label>
@@ -64,7 +62,7 @@
         </div>
     </div>
 
-    <!-- Script requis par le module pour charger la base mondiale des drapeaux -->
+    <!-- Chargement asynchrone des bibliothèques au démarrage global de la page -->
     <script src="https://jsdelivr.net"></script>
     <script>
         // CONFIGURATION DU PROJET SUPABASE
@@ -75,26 +73,25 @@
         let roleChoisi = '';
         let itiInstance;
 
-        // Active le gestionnaire global de drapeaux et de recherche de pays
-        function initialiserChampTelephone() {
+        // ÉTAPE CRITIQUE : On pré-charge le script au chargement initial du site
+        // Cela supprime 100% de la lenteur au clic sur les profils
+        window.addEventListener("DOMContentLoaded", function() {
             const inputTelephone = document.querySelector("#phoneNum");
             itiInstance = window.intlTelInput(inputTelephone, {
-                initialCountry: "ci", // Côte d'Ivoire sélectionnée au départ
-                preferredCountries: ["ci", "sn", "fr", "ma"], // Pays favoris épinglés tout en haut
-                separateDialCode: true, // Sépare visuellement l'indicatif (+225) du champ texte
-                countrySearch: true, // 🌟 Active la recherche textuelle dynamique de A à Z dans la liste
-                utilsScript: "https://jsdelivr.net"
+                initialCountry: "ci", // Côte d'Ivoire par défaut
+                preferredCountries: ["ci", "sn", "fr", "ma"], 
+                separateDialCode: true // Affiche proprement l'indicatif à côté du drapeau
             });
-        }
+        });
 
+        // Activation immédiate et fluide du changement d'écran
         function selectProfile(role) {
             roleChoisi = role;
             document.getElementById('step-1').style.display = 'none';
             document.getElementById('step-2').style.display = 'block';
-            initialiserChampTelephone(); // Déploie l'outil sur le champ téléphone
         }
 
-        // Vérifications de sécurité et envoi vers l'authentification Supabase
+        // Sécurité et envoi des données à Supabase Auth
         async function finaliserInscriptionDirecte() {
             const name = document.getElementById('fullname').value.trim();
             const email = document.getElementById('email').value.trim().toLowerCase();
@@ -102,22 +99,20 @@
             const pass = document.getElementById('password').value;
             const confirmPass = document.getElementById('confirmPassword').value;
 
-            // 1. Validation de sécurité : Correspondance stricte des mots de passe
             if (pass !== confirmPass) {
-                alert("❌ Erreur : Les deux mots de passe ne correspondent pas. Veuillez réessayer.");
+                alert("❌ Erreur : Les deux mots de passe ne correspondent pas.");
                 return;
             }
 
-            // 2. Validation de sécurité : Règle de longueur minimale Supabase Auth
             if (pass.length < 6) {
                 alert("❌ Erreur : Le mot de passe doit contenir au moins 6 caractères.");
                 return;
             }
 
-            // 3. Extraction automatique des informations du pays depuis le choix du drapeau
-            const numeroComplet = itiInstance.getNumber(); // Numéro nettoyé au format international (ex: +225XXXX)
-            const codeISO = itiInstance.getSelectedCountryData().iso2.toUpperCase(); // Code standardisé (ex: CI, SN, FR)
-            const nomPays = itiInstance.getSelectedCountryData().name; // Nom complet du pays en toutes lettres
+            // Récupération instantanée des valeurs sélectionnées
+            const numeroComplet = itiInstance.getNumber(); 
+            const codeISO = itiInstance.getSelectedCountryData().iso2.toUpperCase(); 
+            const nomPays = itiInstance.getSelectedCountryData().name; 
 
             try {
                 const response = await fetch(SUPABASE_URL + "/auth/v1/signup", {
